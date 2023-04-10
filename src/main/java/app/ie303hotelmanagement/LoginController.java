@@ -36,7 +36,7 @@ public class LoginController {
         String inputPassword = password.getText();
 
         // Connect to the database
-        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "tiendat1102");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
 
         // Prepare the SQL statement to retrieve the account with the given username and password
         String sql = "SELECT * FROM account WHERE account_name = ? AND account_password = ?";
