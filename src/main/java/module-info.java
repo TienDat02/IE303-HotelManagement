@@ -4,7 +4,8 @@ module com.example.ie303hotelmanagement {
 
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
 
-    opens com.example.ie303hotelmanagement to javafx.fxml;
-    exports com.example.ie303hotelmanagement;
+    opens app.ie303hotelmanagement to javafx.fxml;
+    exports app.ie303hotelmanagement;
 }

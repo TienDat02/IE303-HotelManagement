@@ -1,4 +1,4 @@
-package com.example.ie303hotelmanagement;
+package app.ie303hotelmanagement;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

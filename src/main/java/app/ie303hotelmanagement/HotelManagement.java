@@ -1,4 +1,4 @@
-package com.example.ie303hotelmanagement;
+package app.ie303hotelmanagement;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,12 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class HotelManagement extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(HotelManagement.class.getResource("Login-Page.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Room Master");
         stage.setScene(scene);
         stage.show();
     }
