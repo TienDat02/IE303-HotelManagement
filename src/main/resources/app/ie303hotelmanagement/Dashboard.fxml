@@ -2,9 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -49,7 +51,7 @@
                   <Font name="Tahoma" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="15.0" top="15.0" />
@@ -63,7 +65,7 @@
                   <Font name="Tahoma" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="15.0" top="15.0" />
@@ -77,7 +79,7 @@
                   <Font name="Tahoma" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="15.0" top="15.0" />
@@ -102,7 +104,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
             </Button>
             <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
@@ -116,7 +118,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
             </Button>
             <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
@@ -130,20 +132,33 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="LogoutButton" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="ĐĂNG XUẤT" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+            <AnchorPane prefHeight="66.0" prefWidth="330.0">
+               <children>
+                  <Button fx:id="LogoutButton" layoutX="34.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="60.0" prefWidth="208.0" style="-fx-background-color: #1C2127;" text="ĐĂNG XUẤT" textFill="WHITESMOKE" AnchorPane.topAnchor="1.0">
+                     <font>
+                        <Font name="Tahoma" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="15.0" top="15.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <ImageView fitHeight="43.0" fitWidth="43.0" layoutX="220.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@logout-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <Group />
          </children>
       </VBox>
    </left>
