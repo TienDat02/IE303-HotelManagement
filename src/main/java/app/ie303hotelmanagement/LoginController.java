@@ -33,7 +33,7 @@ public class LoginController {
         String inputPassword = password.getText();
 
         // Connect to the database
-        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "tiendat1102");
 
         // Prepare the SQL statement to retrieve the account with the given username and password
         String sql = "SELECT * FROM account WHERE account_name = ? AND account_password = ?";
@@ -71,7 +71,7 @@ public class LoginController {
             stmt2.setString(1, employeeID); //FIXED
             ResultSet rs2 = stmt2.executeQuery(); //FIXED
             if (rs2.next()) {
-                NhanVien nhanVien = NhanVien.getInstance();
+                NhanVien nhanVien = new NhanVien();
                 nhanVien.setMaNhanVien(rs2.getString("Employee_ID"));
                 nhanVien.setTenNhanVien(rs2.getString("Employee_Name"));
                 nhanVien.setNgaySinh(rs2.getDate("Employee_DateofBirth"));

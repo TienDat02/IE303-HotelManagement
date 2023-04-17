@@ -17,15 +17,23 @@ public class NhanVien {
     private String trangThai;
 
     private static NhanVien instance;
-    private NhanVien(){
+    public NhanVien() {
+    }
+    public NhanVien(String maNhanVien, String tenNhanVien, Date ngaySinh, String gioiTinh, String diaChi, String soDienThoai, String email, String CCCD, String chucVu, double luong, Date ngayVaoLam, String trangThai) {
+        this.maNhanVien = maNhanVien;
+        this.tenNhanVien = tenNhanVien;
+        this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
+        this.diaChi = diaChi;
+        this.soDienThoai = soDienThoai;
+        this.email = email;
+        this.CCCD = CCCD;
+        this.chucVu = chucVu;
+        this.luong = luong;
+        this.ngayVaoLam = ngayVaoLam;
+        this.trangThai = trangThai;
+    }
 
-    }
-    public static NhanVien getInstance() {
-        if (instance == null) {
-            instance = new NhanVien();
-        }
-        return instance;
-    }
 
     public String getMaNhanVien() {
         return maNhanVien;
