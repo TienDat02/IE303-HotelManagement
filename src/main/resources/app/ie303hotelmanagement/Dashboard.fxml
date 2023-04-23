@@ -27,7 +27,7 @@
                   <Insets />
                </VBox.margin>
             </ImageView>
-            <Button fx:id="helloButton" mnemonicParsing="false" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
+            <Button fx:id="navDashboardButton" mnemonicParsing="false" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                <VBox.margin>
                   <Insets left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
@@ -35,7 +35,7 @@
                   <Font name="Tahoma Bold" size="24.0" />
                </font>
             </Button>
-            <Button fx:id="checkInButton" mnemonicParsing="false" onAction="#handleCheckInButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
+            <Button fx:id="navCheckInButton" mnemonicParsing="false" onAction="#handleCheckinButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
@@ -49,7 +49,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
+            <Button fx:id="checkoutButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -63,7 +63,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
+            <Button fx:id="serviceButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -77,7 +77,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
+            <Button fx:id="guestButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -96,7 +96,7 @@
                   <Insets bottom="5.0" left="25.0" top="15.0" />
                </VBox.margin>
             </Line>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
+            <Button fx:id="roomButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -110,7 +110,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
+            <Button fx:id="navEmployeeButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -124,7 +124,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
+            <Button fx:id="reportButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -168,9 +168,9 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox layoutX="898.0" layoutY="180.0" prefHeight="795.0" prefWidth="580.0" style="-fx-alignment: center; -fx-background-color: D9D9D9; -fx-background-radius: 10 10 10 10;">
+            <VBox layoutX="898.0" layoutY="180.0" prefHeight="795.0" prefWidth="580.0" style="-fx-alignment: center; -fx-background-color: #1C2127; -fx-background-radius: 10 10 10 10;">
                <children>
-                  <TextField fx:id="employeeID" alignment="CENTER" editable="false" prefHeight="61.0" prefWidth="492.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="employeeID" alignment="CENTER" editable="false" prefHeight="61.0" prefWidth="492.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <VBox.margin>
                         <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                      </VBox.margin>
@@ -181,7 +181,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="name" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="name" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -192,7 +192,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="dateOfBirth" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="dateOfBirth" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -203,7 +203,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="gender" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="gender" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -214,7 +214,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="address" alignment="CENTER" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="address" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -225,7 +225,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="phone" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="phone" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -236,7 +236,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="email" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="email" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -247,7 +247,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="cccd" alignment="CENTER" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="cccd" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -258,7 +258,7 @@
                         <Font name="Tahoma" size="35.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="position" alignment="CENTER" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                  <TextField fx:id="position" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -271,9 +271,9 @@
                   </TextField>
                </children>
             </VBox>
-            <VBox layoutX="576.0" layoutY="180.0" prefHeight="795.0" prefWidth="341.0" style="-fx-alignment: center; -fx-background-color: D9D9D9; -fx-background-radius: 10 10 0 10;" AnchorPane.topAnchor="180.0">
+            <VBox layoutX="576.0" layoutY="180.0" prefHeight="795.0" prefWidth="341.0" style="-fx-alignment: center; -fx-background-color: #1C2127; -fx-background-radius: 10 10 0 10;" AnchorPane.topAnchor="180.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MSNV:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="MSNV:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -281,7 +281,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên: " wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên: " wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -289,7 +289,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -297,7 +297,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -305,7 +305,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Địa chỉ:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Địa chỉ:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -313,7 +313,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -321,7 +321,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -329,7 +329,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -337,7 +337,7 @@
                         <Insets bottom="15.0" top="15.0" />
                      </VBox.margin>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chức vụ:" wrappingWidth="250.0">
+                  <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chức vụ:" wrappingWidth="250.0">
                      <font>
                         <Font name="Tahoma Bold" size="35.0" />
                      </font>
@@ -347,12 +347,20 @@
                   </Text>
                </children>
             </VBox>
-            <Pane layoutX="46.0" layoutY="170.0" prefHeight="795.0" prefWidth="478.0" style="-fx-background-color: BED4E9; -fx-background-radius: 20 20 20 20;" AnchorPane.topAnchor="180.0" />
-            <Text layoutX="54.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DASHBOARD" wrappingWidth="407.7509765625">
+            <Pane layoutX="46.0" layoutY="170.0" prefHeight="795.0" prefWidth="478.0" style="-fx-background-color: BED4E9; -fx-background-radius: 20 20 20 20;" AnchorPane.topAnchor="180.0">
+               <children>
+                  <Text fx:id="nameId1" layoutX="89.0" layoutY="562.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert name here" textAlignment="CENTER" wrappingWidth="300.0">
+                     <font>
+                        <Font name="Tahoma Bold" size="40.0" />
+                     </font>
+                  </Text>
+               </children></Pane>
+            <Text layoutX="54.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DASHBOARD" wrappingWidth="407.7509765625" AnchorPane.topAnchor="60.0">
                <font>
                   <Font name="Bell MT Bold" size="50.0" />
                </font>
             </Text>
+            <Line endX="1226.0" layoutX="248.0" layoutY="140.0" startX="-198.0" />
          </children>
       </AnchorPane>
    </center>

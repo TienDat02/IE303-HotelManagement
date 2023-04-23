@@ -53,39 +53,15 @@ public class LoginController {
             Stage window = (Stage) login.getScene().getWindow();
             window.setScene(dashboardScene);
             window.show();
-            String sql1 = "SELECT employee.Employee_ID " +
-                    "FROM employee " +
-                    "INNER JOIN account ON employee.Employee_ID=account.Employee_ID " +
-                    "WHERE account.Account_Name = ?";
-            PreparedStatement stmt1 = conn.prepareStatement(sql1); //FIXED
-            stmt1.setString(1, inputUsername); //FIXED
-            ResultSet rs1 = stmt1.executeQuery(); //FIXED
+            String sql1 = "SELECT Employee_ID FROM account WHERE account_name = ?";
+            PreparedStatement stmt1 = conn.prepareStatement(sql1);
+            stmt1.setString(1, inputUsername);
+            ResultSet rs1 = stmt1.executeQuery();
             String employeeID = null;
             if (rs1.next()) {
                 employeeID = rs1.getString("Employee_ID");
-            }
-            String sql2 = "select * " +
-                    "from employee " +
-                    "where Employee_ID= ?";
-            PreparedStatement stmt2 = conn.prepareStatement(sql2); //FIXED
-            stmt2.setString(1, employeeID); //FIXED
-            ResultSet rs2 = stmt2.executeQuery(); //FIXED
-            if (rs2.next()) {
-                NhanVien nhanVien = new NhanVien();
-                nhanVien.setMaNhanVien(rs2.getString("Employee_ID"));
-                nhanVien.setTenNhanVien(rs2.getString("Employee_Name"));
-                nhanVien.setNgaySinh(rs2.getDate("Employee_DateofBirth"));
-                nhanVien.setGioiTinh(rs2.getString("Employee_Gender"));
-                nhanVien.setDiaChi(rs2.getString("Employee_Address"));
-                nhanVien.setSoDienThoai(rs2.getString("Employee_Phone"));
-                nhanVien.setEmail(rs2.getString("Employee_Email"));
-                nhanVien.setCCCD(rs2.getString("Employee_CCCD"));
-                nhanVien.setNgayVaoLam(rs2.getDate("Employee_BeginDate"));
-                nhanVien.setLuong(rs2.getDouble("Employee_Salary"));
-                nhanVien.setTrangThai(rs2.getString("Employee_Status"));
-                nhanVien.setChucVu(rs2.getString("Employee_Position"));
                 DashboardController dashboardController = loader.getController();
-                dashboardController.initialize(nhanVien);
+                dashboardController.setEmployeeID(employeeID);
             }
         } else {
             // If there is no match, show an error message
@@ -95,7 +71,7 @@ public class LoginController {
             alert.setContentText("Vui lòng thử lại");
             alert.showAndWait();
         }
-
+        conn.close();
         // Close the database connection
 
     }
