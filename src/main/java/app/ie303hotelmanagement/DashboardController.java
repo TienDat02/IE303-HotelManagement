@@ -44,6 +44,8 @@ public class DashboardController {
     private Button navCheckInButton;
     @FXML
     private Button navEmployeeButton;
+    @FXML
+    private Button navCheckoutButton;
 
     private String employeeID1; // đây là biến để lưu lại employeeID khi chuyển qua lại giữa các trang
     // đây là hàm để lấy employeeID từ trang login
@@ -94,6 +96,17 @@ public class DashboardController {
         System.out.println("employeeID in DashboardController: " + employeeID1); // Add this line
         Scene dashboardScene = new Scene(dashboardParent);
         Stage window = (Stage) navCheckInButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+
+    @FXML
+    public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
+        Parent dashboardParent = loader.load();
+        CheckOutController checkOut = loader.getController();
+        checkOut.setEmployeeID(employeeID1);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navCheckoutButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
 

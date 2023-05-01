@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class RoomController {
+    private String connectUrl = "jdbc:mysql://127.0.0.1:3306/hotelmanagement";
+    private String username = "root";
+    private String password = "";
     @FXML
     private Button LogoutButton;
 
@@ -71,7 +74,7 @@ public class RoomController {
         // load data from database
         ArrayList<RoomDetail> roomDisplay = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+            Connection conn = DriverManager.getConnection(connectUrl, username, password);
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM room");
             ResultSet rs = ps.executeQuery();
             int i = 1;
@@ -111,7 +114,7 @@ public class RoomController {
 
     public void handleAddRoomButton(MouseEvent event) {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+            Connection conn = DriverManager.getConnection(connectUrl,username , password);
             PreparedStatement ps = conn.prepareStatement("INSERT INTO room (Room_ID, Room_Type, Room_Floor, Room_Price, Room_Status) VALUES (?, ?, ?, ?, ?)");
             ps.setString(1, roomId.getText());
             ps.setString(2, roomType.getText());
@@ -162,7 +165,7 @@ public class RoomController {
                     return;
                 }
 
-                Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+                Connection conn = DriverManager.getConnection(connectUrl, username, password);
                 PreparedStatement ps = conn.prepareStatement("UPDATE room SET Room_ID = ?, Room_Type = ?, Room_Floor = ?, Room_Price = ?, Room_Status = ? WHERE Room_ID = ?");
                 ps.setString(1, id);
                 ps.setString(2, type);
@@ -183,7 +186,14 @@ public class RoomController {
         RoomDetail selectedRoom = roomTable.getSelectionModel().getSelectedItem();
         if (selectedRoom != null) {
             try {
-                Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+                if(selectedRoom.getRoomStatus().equals("Chờ trả") || selectedRoom.getRoomStatus().equals("Đang thuê") || selectedRoom.getRoomStatus().equals("Đặt trước")) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Phòng đang được sử dụng không thể xóa!");
+
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                    return;
+                }
+                Connection conn = DriverManager.getConnection(connectUrl, username, password);
                 // delete relationship of checkin table with foreign key Room_ID
                 PreparedStatement ps1 = conn.prepareStatement("DELETE FROM checkin WHERE Room_ID = ?");
                 ps1.setString(1, selectedRoom.getRoomID());
@@ -211,7 +221,7 @@ public class RoomController {
     private void refreshTable() {
         roomList.clear();
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+            Connection conn = DriverManager.getConnection(connectUrl, username, password);
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM room");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

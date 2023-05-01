@@ -49,7 +49,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="checkoutButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
+            <Button fx:id="navCheckoutButton" mnemonicParsing="false" onAction="#handleNavCheckoutButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
