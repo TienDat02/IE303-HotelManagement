@@ -18,7 +18,6 @@ import java.util.Optional;
 public class DashboardController {
     @FXML
     private Button LogoutButton;
-
     @FXML
     private TextField employeeID;
     @FXML
@@ -41,7 +40,17 @@ public class DashboardController {
     private Button helloButton;
     @FXML
     private Button checkInButton;
+    @FXML
+    private Button reportBtn;
 
+    @FXML
+    void handlReportBtn(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("Report.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) reportBtn.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
     @FXML
     void handleLogoutButton(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc về việc đăng xuất hay không?");
@@ -68,6 +77,7 @@ public class DashboardController {
         position.setText(nhanVien.getChucVu());
         cccd.setText(nhanVien.getCCCD());
     }
+
     @FXML
     void handleCheckInButton(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Checkin.fxml"));
