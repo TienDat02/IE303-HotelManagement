@@ -25,7 +25,10 @@ public class LoginController {
 
     @FXML
     private Button login;
-
+    private static String employeeID;
+    public static String getEmployeeID() {
+        return employeeID;
+    }
     @FXML
     void handleLogin(ActionEvent event) throws SQLException, IOException {
         //Get the username and password from the input fields
@@ -33,7 +36,7 @@ public class LoginController {
         String inputPassword = password.getText();
 
         // Connect to the database
-        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "tiendat1102");
 
         // Prepare the SQL statement to retrieve the account with the given username and password
         String sql = "SELECT * FROM account WHERE account_name = ? AND account_password = ?";
@@ -61,7 +64,7 @@ public class LoginController {
             if (rs1.next()) {
                 employeeID = rs1.getString("Employee_ID");
                 DashboardController dashboardController = loader.getController();
-                dashboardController.setEmployeeID(employeeID);
+                dashboardController.initialize(employeeID);
             }
         } else {
             // If there is no match, show an error message

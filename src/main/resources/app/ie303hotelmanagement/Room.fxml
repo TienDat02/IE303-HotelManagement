@@ -31,7 +31,7 @@
                   <Insets />
                </VBox.margin>
             </ImageView>
-            <Button mnemonicParsing="false" prefHeight="69.0" prefWidth="308.0" text="Xin chào, Quadra">
+            <Button fx:id="navDashboardButton" mnemonicParsing="false" onAction="#handleNavDashboardButton" prefHeight="69.0" prefWidth="308.0" text="DASHBOARD">
                <VBox.margin>
                   <Insets left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
@@ -39,7 +39,7 @@
                   <Font name="Tahoma Bold" size="24.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="62.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
+            <Button fx:id="navCheckinButton" mnemonicParsing="false" onAction="#handleNavCheckinButton" prefHeight="62.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
@@ -53,7 +53,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="57.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
+            <Button fx:id="navCheckoutButton" mnemonicParsing="false" onAction="#handleNavCheckoutButton" prefHeight="57.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -67,7 +67,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
+            <Button fx:id="navServiceButton" mnemonicParsing="false" onAction="#handleNavServiceButton" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -81,7 +81,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
+            <Button fx:id="navCustomerButton" mnemonicParsing="false" onAction="#handleNavCustomerButton" prefHeight="45.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -100,7 +100,7 @@
                   <Insets bottom="5.0" left="25.0" top="15.0" />
                </VBox.margin>
             </Line>
-            <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
+            <Button fx:id="navRoomButton" mnemonicParsing="false" onAction="#handleNavRoomButton" prefHeight="46.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -114,7 +114,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
+            <Button fx:id="navEmployeeButton" mnemonicParsing="false" onAction="#handleNavEmployeeButton" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -128,7 +128,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
+            <Button fx:id="navReportButton" mnemonicParsing="false" onAction="#handleNavReportButton" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
