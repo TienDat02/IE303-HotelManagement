@@ -60,9 +60,9 @@ public class CustomerController {
     @FXML
     private TableColumn<Customer, String> noteColumn;
     long count = 1;
-    private String databaseUrl = "jdbc:mysql://127.0.0.1:3306/hotelmanagement";
-    private String databaseUsername = "root";
-    private String databasePassword = "tiendat1102";
+    private String databaseUrl = DataConnector.getDatabaseUrl() ;
+    private String databaseUsername = DataConnector.getUsername();
+    private String databasePassword = DataConnector.getPassword();
     private String employeeID;
     @FXML
     private Button navServiceButton;

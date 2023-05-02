@@ -25,9 +25,9 @@ public class AddServiceController {
     private TextField inputServicePrice;
     @FXML
     private TextField inputServiceDescription;
-    private String databaseUrl = "jdbc:mysql://localhost:3306/HotelManagement";
-    private String databaseUsername = "root";
-    private String databasePassword = "tiendat1102";
+    private String databaseUrl = DataConnector.getDatabaseUrl();
+    private String databaseUsername = DataConnector.getUsername();
+    private String databasePassword = DataConnector.getPassword();
     public void handleButtonAddService(ActionEvent event) throws SQLException {
         String serviceName = inputServiceName.getText();
         float servicePrice = Float.parseFloat(inputServicePrice.getText());

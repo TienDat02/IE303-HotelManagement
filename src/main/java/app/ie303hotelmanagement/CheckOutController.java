@@ -20,9 +20,9 @@ import javafx.stage.Stage;
 
 
 public class CheckOutController {
-    private String connectUrl = "jdbc:mysql://127.0.0.1:3306/hotelmanagement";
-    private String username = "root";
-    private String password = "tiendat1102";
+    private String connectUrl = DataConnector.getDatabaseUrl();
+    private String username = DataConnector.getUsername();
+    private String password = DataConnector.getPassword();
 
     @FXML
     private Button LogoutButton;

@@ -26,9 +26,9 @@ public class AlterServiceController {
     @FXML
     private Button btnBack;
     private String operateServiceID;
-    private String databaseUrl = "jdbc:mysql://localhost:3306/HotelManagement";
-    private String databaseUsername = "root";
-    private String databasePassword = "tiendat1102";
+    private String databaseUrl = DataConnector.getDatabaseUrl();
+    private String databaseUsername = DataConnector.getUsername();
+    private String databasePassword = DataConnector.getPassword();
     private Service serviceAlter=new Service();
 
     public void setOperateServiceID(String operateServiceID) {

@@ -36,12 +36,15 @@ public class ReportController {
     private Button navReportButton;
     @FXML
     private Button LogoutButton;
+    private String connectUrl = DataConnector.getDatabaseUrl();
+    private String username = DataConnector.getUsername();
+    private String password = DataConnector.getPassword();
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
     public void PrintEmployeeList() throws JRException, SQLException, ClassNotFoundException {
         // Establish a connection to the database
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hotelmanagement", "root", "tiendat1102");
+        Connection connection = DriverManager.getConnection(connectUrl, username, password);
 
         // Create a statement
         Statement statement = connection.createStatement();

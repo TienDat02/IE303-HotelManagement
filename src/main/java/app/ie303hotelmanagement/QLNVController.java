@@ -66,9 +66,9 @@ public class QLNVController {
     @FXML
     private Button navReportButton;
     private String employeeID;
-    private String connectUrl = "jdbc:mysql://127.0.0.1:3306/hotelmanagement";
-    private String username = "root";
-    private String password = "tiendat1102";
+    private String connectUrl = DataConnector.getDatabaseUrl();
+    private String username = DataConnector.getUsername();
+    private String password = DataConnector.getPassword();
 
     final ObservableList<NhanVien> custList = FXCollections.observableArrayList();
 
@@ -192,7 +192,7 @@ public class QLNVController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeInfoPage.fxml"));
         Parent root = loader.load();
         EmployeeInfoController controller = loader.getController();
-        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "tiendat1102");
+        Connection conn = DriverManager.getConnection(connectUrl, username, password);
         // Create a statement to execute the query
         Statement stmt = conn.createStatement();
         // Execute the query and store the result in a ResultSet
@@ -231,7 +231,7 @@ public class QLNVController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Delete the selected employee from the database
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "tiendat1102");
+            Connection conn = DriverManager.getConnection(connectUrl, username, password);
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM employee WHERE Employee_ID = ?");
             stmt.setString(1, selectedNhanVien.getMaNhanVien());
             stmt.executeUpdate();

@@ -57,6 +57,9 @@ public class EmployeeInfoController {
     @FXML
     private Button LogoutButton;
 
+    private String connectUrl = DataConnector.getDatabaseUrl();
+    private String username = DataConnector.getUsername();
+    private String password = DataConnector.getPassword();
     public void initData(NhanVien nhanVien) {
         employeeID.setText(nhanVien.getMaNhanVien());
         name.setText(nhanVien.getTenNhanVien());
@@ -133,7 +136,7 @@ public class EmployeeInfoController {
 
         NhanVien updatedNhanVien = new NhanVien(id, updatedName, updatedDateOfBirth, updatedGender, updatedAddress, updatedPhone, updatedEmail, updatedCCCD, updatedPosition, updatedSalary, updatedBeginDate, updatedStatus);
 
-        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hotelmanagement", "root", "tiendat1102");
+        Connection conn = DriverManager.getConnection(connectUrl, username, password);
         // Check if the employee ID already exists in the database
         String checkQuery = "SELECT * FROM employee WHERE Employee_ID=?";
         PreparedStatement checkStmt = conn.prepareStatement(checkQuery);

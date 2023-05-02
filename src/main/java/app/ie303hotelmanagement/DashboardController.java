@@ -55,9 +55,9 @@ public class DashboardController {
     @FXML
     private Button navReportButton;
 
-    private String databaseUrl = "jdbc:mysql://localhost:3306/HotelManagement";
-    private String username = "root";
-    private String password = "tiendat1102";
+    private String databaseUrl = DataConnector.getDatabaseUrl();
+    private String username = DataConnector.getUsername();
+    private String password = DataConnector.getPassword();
     private String employeeID; // đây là biến để lưu lại employeeID khi chuyển qua lại giữa các trang
     // đây là hàm để lấy employeeID từ trang login
     void initialize(String employeeID) throws SQLException {

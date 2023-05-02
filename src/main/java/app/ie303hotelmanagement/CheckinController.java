@@ -69,9 +69,9 @@ public class CheckinController {
 
     private String employeeID;//đây là biến để lưu lại employeeID khi chuyển qua lại giữa các trang
     private int count = 1;
-    private String connectionString = "jdbc:mysql://localhost:3306/hotelmanagement";
-    private String username = "root";
-    private String password = "tiendat1102";
+    private String connectionString = DataConnector.getDatabaseUrl();
+    private String username = DataConnector.getUsername();
+    private String password = DataConnector.getPassword();
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
