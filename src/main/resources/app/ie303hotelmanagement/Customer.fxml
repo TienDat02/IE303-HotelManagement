@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.ie303hotelmanagement.CustomerController">
+   <left>
+      <VBox fx:id="NavBarComponent" prefHeight="1080.0" prefWidth="314.0" style="-fx-background-color: #1C2127;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="330.0" fitWidth="336.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Logo.png" />
+               </image>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </ImageView>
+            <Button fx:id="helloButton" mnemonicParsing="false" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
+               <VBox.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Tahoma Bold" size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="checkInButton" mnemonicParsing="false" onAction="#handleCheckInButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="CheckOutButton" mnemonicParsing="false" onAction="#handleCheckOutButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="ServiceButton" mnemonicParsing="false" onAction="#handleServiceButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="CustomerButton" mnemonicParsing="false" onAction="#handleCustomerButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Line endX="275.0" stroke="#e7f1fb" strokeWidth="2.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="25.0" top="15.0" />
+               </VBox.margin>
+            </Line>
+            <Button fx:id="RoomButton" mnemonicParsing="false" onAction="#handleRoomButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="EmployeeButton" mnemonicParsing="false" onAction="#handleEmployeeButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="ReportButton" mnemonicParsing="false" onAction="#handleReportButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            <AnchorPane prefHeight="66.0" prefWidth="330.0">
+               <children>
+                  <Button fx:id="LogoutButton" layoutX="34.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="60.0" prefWidth="208.0" style="-fx-background-color: #1C2127;" text="ĐĂNG XUẤT" textFill="WHITESMOKE" AnchorPane.topAnchor="1.0">
+                     <font>
+                        <Font name="Tahoma" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="15.0" top="15.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <ImageView fitHeight="43.0" fitWidth="43.0" layoutX="220.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@logout-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <Group />
+         </children>
+      </VBox>
+   </left>
+   <right>
+      <AnchorPane fx:id="handleAddCustomer" accessibleRole="BUTTON" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="54.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ KHÁCH HÀNG" wrappingWidth="591.7509460449219">
+               <font>
+                  <Font name="Arial Bold" size="50.0" />
+               </font>
+            </Text>
+            <TableView fx:id="customerTable" layoutX="652.0" layoutY="173.0" prefHeight="787.0" prefWidth="919.0">
+              <columns>
+                <TableColumn fx:id="sttColumn" minWidth="0.0" prefWidth="85.33331298828125" text="STT" />
+                  <TableColumn fx:id="cccdColumn" prefWidth="187.3333740234375" text="CCCD" />
+                  <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="257.3333740234375" text="TÊN KHÁCH HÀNG" />
+                  <TableColumn fx:id="birthYearColumn" minWidth="0.0" prefWidth="81.6666259765625" text="NĂM SINH" />
+                  <TableColumn fx:id="phoneNumberColumn" minWidth="0.0" prefWidth="150.666748046875" text="SỐ ĐIỆN THOẠI" />
+                  <TableColumn fx:id="noteColumn" minWidth="0.0" prefWidth="156.6666259765625" text="GHI CHÚ" />
+              </columns>
+            </TableView>
+            <Line endX="1375.2000732421875" endY="7.62939453125E-6" layoutX="216.0" layoutY="105.0" startX="-216.0" startY="7.62939453125E-6" />
+            <Button fx:id="addCustomerButton" layoutX="50.0" layoutY="693.0" mnemonicParsing="false" onAction="#handleAddCustomer" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Thêm" textFill="#181818">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="alterCustomerButton" layoutX="233.0" layoutY="692.0" mnemonicParsing="false" onAction="#handleUpdateCustomer" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Sửa" textFill="#181818">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="deleteCustomerButton" layoutX="421.0" layoutY="691.0" mnemonicParsing="false" onAction="#handleDeleteCustomer" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Xóa" textFill="#181818">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <AnchorPane layoutX="22.0" layoutY="126.0" prefHeight="62.0" prefWidth="282.0" style="-fx-background-color: #fffdfd;">
+               <children>
+                  <Line endX="1462.400146484375" endY="-2.0" layoutX="-1190.0" layoutY="55.0" startX="1208.0" startY="-2.0" />
+                  <TextField fx:id="findingCustomer" layoutX="62.0" layoutY="4.0" onKeyReleased="#filterSearch" prefHeight="27.0" prefWidth="210.0" promptText="Tìm khách hàng" style="-fx-background-color: FFFFFFF;">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+                  <ImageView fx:id="fidingCustomerImage" accessibleRole="BUTTON" fitHeight="43.0" fitWidth="43.0" layoutX="18.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Search-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <Button fx:id="ReloadButton" layoutX="235.0" layoutY="804.0" mnemonicParsing="false" onAction="#handleReloadScene" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Reload" textFill="#181818">
+               <font>
+                  <Font name="Tahoma" size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <AnchorPane layoutX="25.0" layoutY="254.0" prefHeight="399.0" prefWidth="606.0" style="-fx-background-color: #1C2127; -fx-background-radius: 20 20 20 20;" AnchorPane.leftAnchor="25.0">
+               <children>
+                  <VBox layoutX="20.0" layoutY="25.0" prefHeight="319.0" prefWidth="174.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
+                     <children>
+                        <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD: ">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên: ">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fill="WHITESMOKE" layoutX="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Năm sinh: ">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại:" wrappingWidth="196.40625">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ghi chú:">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="256.0" layoutY="25.0" prefHeight="350.0" prefWidth="387.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0">
+                     <children>
+                        <TextField fx:id="inputCCCD" alignment="CENTER" prefHeight="65.0" prefWidth="387.0" style="-fx-background-radius: 20 20 20 20;">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </TextField>
+                        <TextField fx:id="inputName" alignment="CENTER" style="-fx-background-radius: 20 20 20 20;">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </TextField>
+                        <TextField fx:id="inputBirthYear" alignment="CENTER" style="-fx-background-radius: 20 20 20 20;">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </TextField>
+                        <TextField fx:id="inputPhoneNumber" alignment="CENTER" style="-fx-background-radius: 20 20 20 20;">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </TextField>
+                        <TextField fx:id="inputNote" alignment="CENTER" style="-fx-background-radius: 20 20 20 20;">
+                           <font>
+                              <Font name="Tahoma Bold" size="24.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <ImageView fitHeight="330.0" fitWidth="336.0" layoutX="-323.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../resources/app/ie303hotelmanagement/Logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>

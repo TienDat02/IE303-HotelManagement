@@ -7,17 +7,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HotelManagement extends Application {
+public class Serviceexe extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HotelManagement.class.getResource("Service.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Service");
         stage.setScene(scene);
         stage.show();
     }
-
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
+
 }
