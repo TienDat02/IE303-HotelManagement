@@ -357,48 +357,41 @@ public class ChiTietCheckOut {
                     try {
                         Connection conn = connect();
 
+                        // Store checkin data into checkin_history table
+                        Statement checkinHistoryStmt = conn.prepareStatement("INSERT INTO checkin_history SELECT *  FROM checkin WHERE Room_ID = ?");
+                        ((PreparedStatement) checkinHistoryStmt).setString(1, roomDisplay.getRoomID());
+                        ((PreparedStatement) checkinHistoryStmt).executeUpdate();
 
-                        //Statement stmt = conn.prepareStatement("INSERT INTO checkout ( guestID, checkOutTime, checkOutDate, totalTime, totalCost, roomID, employeeID) VALUES (?,?,?,?,?,?,?) ");
-                        Statement stmt = conn.prepareStatement("INSERT INTO checkout ( Guest_ID, checkout_Time, checkout_Date, total_Time,Room_ID, employee_ID) VALUES (?,?,?,?,?,?) ");
-                        ((PreparedStatement) stmt).setString(1, customerDisplay.getCccd());
-                        ((PreparedStatement) stmt).setTime(2, java.sql.Time.valueOf(LocalTime.now()));
-                        ((PreparedStatement) stmt).setDate(3, java.sql.Date.valueOf(LocalDate.now()));
-                        ((PreparedStatement) stmt).setInt(4, time);
-                        ((PreparedStatement) stmt).setString(5, roomDisplay.getRoomID());
-                        ((PreparedStatement) stmt).setString(6, employeeID);
-                        ((PreparedStatement) stmt).executeUpdate();
+                        // Delete checkin data
+                        Statement checkinDeleteStmt = conn.createStatement();
+                        checkinDeleteStmt.executeUpdate("DELETE FROM checkin WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
 
-                        Statement billStatement = conn.prepareStatement("INSERT INTO bill ( Guest_ID, Total_Cost, Room_ID) VALUES (?,?,?) ");
+                        // Insert checkout data
+                        Statement checkoutStmt = conn.prepareStatement("INSERT INTO checkout (Guest_ID, checkout_Time, checkout_Date, total_Time, Room_ID, employee_ID) VALUES (?,?,?,?,?,?) ");
+                        ((PreparedStatement) checkoutStmt).setString(1, customerDisplay.getCccd());
+                        ((PreparedStatement) checkoutStmt).setTime(2, java.sql.Time.valueOf(LocalTime.now()));
+                        ((PreparedStatement) checkoutStmt).setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                        ((PreparedStatement) checkoutStmt).setInt(4, time);
+                        ((PreparedStatement) checkoutStmt).setString(5, roomDisplay.getRoomID());
+                        ((PreparedStatement) checkoutStmt).setString(6, employeeID);
+                        ((PreparedStatement) checkoutStmt).executeUpdate();
+
+                        Statement billStatement = conn.prepareStatement("INSERT INTO bill (Guest_ID, Total_Cost, Room_ID) VALUES (?,?,?) ");
                         ((PreparedStatement) billStatement).setString(1, customerDisplay.getCccd());
                         float total = Float.parseFloat(totalMoney.getText().replace(",", "."));
                         ((PreparedStatement) billStatement).setFloat(2, total);
                         ((PreparedStatement) billStatement).setString(3, roomDisplay.getRoomID());
-
                         ((PreparedStatement) billStatement).executeUpdate();
-                        conn.close();
-                    } catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
 
-                for (RoomDetail roomDisplay : displayRoomList) {
-                    try {
-                        Connection conn = connect();
-                        Statement stmt = conn.createStatement();
-                        stmt.executeUpdate("INSERT INTO used_service\n" +
-                                "SELECT * FROM room_service\n" +
-                                "WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
-                        stmt.executeUpdate("DELETE FROM room_service WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
-                        conn.close();
-                    } catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    try {
-                        Connection conn = connect();
-                        Statement stmt = conn.createStatement();
-                        stmt.executeUpdate("DELETE FROM checkin WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
-                        Statement stmt2 = conn.createStatement();
-                        stmt2.executeUpdate("UPDATE room SET Room_Status = 'Trống' WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
+                        // Delete room_service data and move it to used_service table
+                        Statement roomServiceStmt = conn.createStatement();
+                        roomServiceStmt.executeUpdate("INSERT INTO used_service SELECT * FROM room_service WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
+                        roomServiceStmt.executeUpdate("DELETE FROM room_service WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
+
+                        // Update room status to "Trống"
+                        Statement roomUpdateStmt = conn.createStatement();
+                        roomUpdateStmt.executeUpdate("UPDATE room SET Room_Status = 'Trống' WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
+
                         conn.close();
                     } catch (SQLException e) {
                         System.out.println(e.getMessage());
@@ -406,15 +399,6 @@ public class ChiTietCheckOut {
                 }
                 CheckOutButton.setDisable(true);
                 CheckOutButton.setText("Đã thanh toán");
-
-                /*
-                Parent root = FXMLLoader.load(getClass().getResource("Check-out.fxml"));
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) CheckoutButton.getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-                */
-
             }
         }
     }
