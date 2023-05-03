@@ -7,10 +7,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 public class ServiceController {
     @FXML
@@ -35,6 +40,41 @@ public class ServiceController {
     private TableColumn<Service, String> serviceIDColumn;
     @FXML
     private TableColumn<Service, String> serviceDescriptionColumn;
+
+    @FXML
+    private TableView<RoomService> roomServiceTable = new TableView<RoomService>();
+    @FXML
+    private TableColumn<RoomService, Integer> idColumn;
+    @FXML
+    private TableColumn<RoomService, Integer> roomServiceIDColumn;
+    @FXML
+    private TableColumn<RoomService, Integer> roomServiceRoomIDColumn;
+    @FXML
+    private TableColumn<RoomService, Integer> roomServiceNameColumn;
+    @FXML
+    private TableColumn<RoomService, Integer> roomServiceQuantityColumn;
+    @FXML
+    private TableColumn<RoomService, Date> roomServiceDateColumn;
+    @FXML
+    private TableColumn<RoomService, Time> roomServiceTimeColumn;
+
+    @FXML
+    private TextField serviceIDField;
+    @FXML
+    private Text serviceNameField;
+    @FXML
+    private TextField serviceRoomIDField;
+    @FXML
+    private TextField serviceTimeField;
+    @FXML
+    private DatePicker serviceDateField;
+    @FXML
+    private TextField serviceQuantityField;
+    @FXML
+    private Button serviceAllocateButton;
+    @FXML
+    private Button serviceCancelButton;
+
     @FXML
     private Button navServiceButton;
     @FXML
@@ -78,6 +118,36 @@ public class ServiceController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Không tìm thấy dịch vụ này!");
             alert.setHeaderText(null);
             alert.showAndWait();
+        }
+    }
+    @FXML
+    public void initializeRoomService() {
+        try {
+            Connection conn = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select Room_Service_ID, room_service.Service_ID, Service_Name, Room_ID, Service_Date, Service_Time, room_service.Service_Quantity FROM room_service, service WHERE service.Service_ID = room_service.Service_ID");
+            List<RoomService> roomServices = new ArrayList<>();
+            while (rs.next()) {
+                int roomServiceID = rs.getInt("Room_Service_ID");
+                int serviceID = rs.getInt("Service_ID");
+                String serviceName = rs.getString("Service_Name");
+                int roomID = rs.getInt("Room_ID");
+                Date roomServiceDate = rs.getDate("Service_Date");
+                Time roomServiceTime = rs.getTime("Service_Time");
+                int quantity = rs.getInt("Service_Quantity");
+                RoomService roomService = new RoomService(roomServiceID, serviceID, serviceName, roomID, roomServiceDate, roomServiceTime, quantity);
+                roomServices.add(roomService);
+            }
+            roomServiceTable.getItems().addAll(roomServices);
+            idColumn.setCellValueFactory(new PropertyValueFactory<>("roomServiceID"));
+            roomServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
+            roomServiceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+            roomServiceRoomIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomID"));
+            roomServiceDateColumn.setCellValueFactory(new PropertyValueFactory<>("roomServiceDate"));
+            roomServiceTimeColumn.setCellValueFactory(new PropertyValueFactory<>("roomServiceTime"));
+            roomServiceQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public void handlePopUpAddServiceButton(ActionEvent event) throws IOException {
@@ -152,6 +222,8 @@ public class ServiceController {
     }
 
     public void initialize() throws SQLException {
+        roomServiceTable.getItems().clear();
+        initializeRoomService();
         serviceTable.getItems().clear();
         Connection connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
         Statement statement = connection.createStatement();
@@ -166,11 +238,98 @@ public class ServiceController {
             Service service = new Service(serviceID, serviceName, servicePrice, serviceDescription, serviceStatus);
             serviceTable.getItems().add(service);
         }
+
         serviceIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceID"));
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         servicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
         serviceDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("serviceDescription"));
+        resultSet.close();
     }
+
+    public void handleServiceIDField(ActionEvent event) throws SQLException {
+        String serviceID = serviceIDField.getText();
+        Connection connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+        String sql = "SELECT * FROM service WHERE Service_ID = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        String[] serviceIDs = serviceID.split(",");
+        StringBuilder serviceNames = new StringBuilder();
+        for (String id : serviceIDs) {
+            statement.setString(1, id.trim());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String serviceName = resultSet.getString("Service_Name");
+                serviceNames.append(serviceName).append(", ");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Dịch vụ không tồn tại!");
+                alert.setHeaderText(null);
+                alert.showAndWait();
+                return;
+            }
+        }
+        serviceNameField.setText(serviceNames.toString().substring(0, serviceNames.length() - 2));
+    }
+
+    public void handleServiceAllocateButton(ActionEvent event) throws SQLException {
+        String[] serviceIDs = serviceIDField.getText().split(",");
+        String roomID = serviceRoomIDField.getText();
+        LocalDate date = serviceDateField.getValue();
+        String time = serviceTimeField.getText();
+        int quantity = Integer.parseInt(serviceQuantityField.getText());
+
+        // Check if time is appropriate
+        LocalTime serviceTime = LocalTime.parse(time);
+        LocalTime startTime = LocalTime.of(5, 0); // Example start time
+        LocalTime endTime = LocalTime.of(23, 0); // Example end time
+        if (serviceTime.isBefore(startTime) || serviceTime.isAfter(endTime)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Thời gian không hợp lệ!");
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
+
+        // Check if date is appropriate
+        LocalDate currentDate = LocalDate.now();
+        if (date.isBefore(currentDate)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Ngày không hợp lệ!");
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
+
+        Connection connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+        String sql = "INSERT INTO room_service (Service_ID, Room_ID, Service_Date, Service_Time, Service_Quantity, Employee_ID) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        for (String serviceID : serviceIDs) {
+            statement.setString(1, serviceID.trim());
+            statement.setString(2, roomID);
+            statement.setDate(3, Date.valueOf(date));
+            statement.setString(4, time);
+            statement.setInt(5, quantity);
+            statement.setString(6, employeeID);
+            statement.executeUpdate();
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Dịch vụ đã được cấp phát cho phòng " + roomID);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+    public void handleServiceCancelButton(ActionEvent event) throws SQLException {
+        Connection connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+        String sql = "DELETE FROM room_service WHERE Service_ID = ? AND Room_ID = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        String[] serviceIDs = serviceIDField.getText().split(",");
+        String roomID = serviceRoomIDField.getText();
+        for (String serviceID : serviceIDs) {
+            statement.setString(1, serviceID.trim());
+            statement.setString(2, roomID);
+            statement.executeUpdate();
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Dịch vụ đã được hủy cho phòng " + roomID);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+
+
     @FXML
     public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));

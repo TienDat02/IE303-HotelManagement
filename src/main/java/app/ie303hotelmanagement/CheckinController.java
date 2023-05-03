@@ -88,7 +88,7 @@ public class CheckinController {
                 inputPhone.setText(rs.getString("Guest_Phone"));
             }
             rs.close(); // đóng kết nối cơ sở dữ liệu
-            PreparedStatement stmt2 = conn.prepareStatement("SELECT Room_ID FROM reservation WHERE Guest_ID = ?");
+            PreparedStatement stmt2 = conn.prepareStatement("SELECT Room_ID FROM reservation WHERE Reservation_Status = 'Đặt trước' AND Guest_ID = ?");
             stmt2.setString(1, inputCCCD.getText());
             ResultSet rs2 = stmt2.executeQuery();
             StringBuilder reservedRooms = new StringBuilder();
@@ -99,7 +99,7 @@ public class CheckinController {
                 reservedRooms.deleteCharAt(reservedRooms.length() - 1); // remove last comma
             }
             rs2.close();
-            PreparedStatement stmt3 = conn.prepareStatement("SELECT Expected_Checkin_Date, Expected_Checkout_Date, Number_ofGuest FROM reservation WHERE Guest_ID = ?");
+            PreparedStatement stmt3 = conn.prepareStatement("SELECT Expected_Checkin_Date, Expected_Checkout_Date, Number_ofGuest FROM reservation WHERE Reservation_Status = 'Đặt trước' AND Guest_ID = ?");
             stmt3.setString(1, inputCCCD.getText());
             ResultSet rs3 = stmt3.executeQuery();
             if (rs3.next()) {
@@ -149,18 +149,6 @@ public class CheckinController {
             }
         });
     }
-
-    @FXML
-    public void reloadCheckinPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-        Parent parent = loader.load();
-        CheckinController checkinController = loader.getController();
-        checkinController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(parent);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
     @FXML
     public void handleReservateButton(ActionEvent event) throws IOException {
         try {
@@ -195,7 +183,7 @@ public class CheckinController {
             LocalDate checkinDate = inputCheckinDate.getValue();
             LocalDate checkoutDate = inputCheckoutDate.getValue();
             for (String roomID : roomIDs) {
-                PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO reservation (Guest_ID, Employee_ID, Room_ID, Reserve_Date, Expected_Checkin_Date, Expected_Checkout_Date, Number_OfGuest) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO reservation (Guest_ID, Employee_ID, Room_ID, Reserve_Date, Expected_Checkin_Date, Expected_Checkout_Date, Number_OfGuest, Reservation_Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Đặt trước')");
                 stmt2.setString(1, inputCCCD.getText());
                 stmt2.setString(2, employeeID);
                 stmt2.setString(3, roomID);
@@ -308,8 +296,9 @@ public class CheckinController {
                     stmt5.setString(5, inputNote.getText());
                     stmt5.executeUpdate();
                 }
-                // delete reservation
-                PreparedStatement stmt6 = conn.prepareStatement("DELETE FROM reservation WHERE Guest_ID = ?");
+
+                // update reservation
+                PreparedStatement stmt6 = conn.prepareStatement("UPDATE reservation SET Reservation_Status = 'Thành công' WHERE Guest_ID = ?");
                 stmt6.setString(1, inputCCCD.getText());
                 stmt6.executeUpdate();
 
@@ -352,7 +341,7 @@ public class CheckinController {
                 stmt2.setString(1, inputCCCD.getText());
                 stmt2.executeUpdate();
 
-                PreparedStatement stmt = conn.prepareStatement("DELETE FROM reservation WHERE Guest_ID = ?");
+                PreparedStatement stmt = conn.prepareStatement("UPDATE reservation SET Reservation_Status = 'Hủy' WHERE Guest_ID = ?");
                 stmt.setString(1, inputCCCD.getText());
                 stmt.executeUpdate();
 

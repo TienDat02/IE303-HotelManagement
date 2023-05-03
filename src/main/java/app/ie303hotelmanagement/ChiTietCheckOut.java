@@ -196,9 +196,24 @@ public class ChiTietCheckOut {
             stage.show();
         }
     }
-
+    private ArrayList<UsedService> getUsedServices(String roomID) {
+        ArrayList<UsedService> usedServiceList = new ArrayList<>();
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT service.Service_ID, service.Service_Name, room_service.Service_Quantity, service.Service_Price FROM service INNER JOIN room_service ON service.Service_ID = room_service.Service_ID WHERE room_service.Room_ID = '" + roomID + "';");
+            while (rs.next()) {
+                UsedService usedService = new UsedService(rs.getString("Service_ID"), rs.getString("Service_Name"),rs.getFloat("Service_Price") , rs.getInt("Service_Quantity"), rs.getFloat("Service_Price") * rs.getInt("Service_Quantity"));
+                usedServiceList.add(usedService);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return usedServiceList;
+    }
     public void setData() {
-
+        System.out.println(employeeID);
         checkoutDate.setText(LocalDate.now().toString());
         CheckOutButton.setDisable(false);
         CheckOutButton.setText("Xác nhận thanh toán");
@@ -220,6 +235,8 @@ public class ChiTietCheckOut {
 
 
         ArrayList<ServiceForCustomer> serviceList = new ArrayList<>();
+
+
 
         ordinalNumberOfServiceColumn.setCellValueFactory(new PropertyValueFactory<>("OrdinalNumber"));
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("ServiceName"));
@@ -252,6 +269,12 @@ public class ChiTietCheckOut {
         displayUsedServiceList = FXCollections.observableArrayList(usedServiceList);
         usedService.setItems(displayUsedServiceList);
         numberOfUsed.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
+
+
+        for (RoomDetail roomDisplay : displayRoomList) {
+            displayUsedServiceList.addAll(getUsedServices(String.valueOf(Integer.parseInt(roomDisplay.getRoomID()))));
+        }
+
         calculateTotalPrice();
 
     }
@@ -292,12 +315,12 @@ public class ChiTietCheckOut {
 
     public void handleBackButton(MouseEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
-        CheckOutController controller = loader.getController();
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) BackButton.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        Parent dashboardParent = loader.load();
+        CheckOutController checkOutController = loader.getController();
+        checkOutController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) BackButton.getScene().getWindow();
+        window.setScene(dashboardScene);
 
     }
 
@@ -347,8 +370,8 @@ public class ChiTietCheckOut {
 
                         Statement billStatement = conn.prepareStatement("INSERT INTO bill ( Guest_ID, Total_Cost, Room_ID) VALUES (?,?,?) ");
                         ((PreparedStatement) billStatement).setString(1, customerDisplay.getCccd());
-
-                        ((PreparedStatement) billStatement).setFloat(2, Float.parseFloat(totalMoney.getText()));
+                        float total = Float.parseFloat(totalMoney.getText().replace(",", "."));
+                        ((PreparedStatement) billStatement).setFloat(2, total);
                         ((PreparedStatement) billStatement).setString(3, roomDisplay.getRoomID());
 
                         ((PreparedStatement) billStatement).executeUpdate();
@@ -359,6 +382,17 @@ public class ChiTietCheckOut {
                 }
 
                 for (RoomDetail roomDisplay : displayRoomList) {
+                    try {
+                        Connection conn = connect();
+                        Statement stmt = conn.createStatement();
+                        stmt.executeUpdate("INSERT INTO used_service\n" +
+                                "SELECT * FROM room_service\n" +
+                                "WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
+                        stmt.executeUpdate("DELETE FROM room_service WHERE Room_ID = '" + roomDisplay.getRoomID() + "'");
+                        conn.close();
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
                     try {
                         Connection conn = connect();
                         Statement stmt = conn.createStatement();

@@ -159,6 +159,7 @@ public class CheckOutController {
                 i++;
             }
 
+
             // Load the next scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Chi-tiet-check-out.fxml"));
             Parent root = loader.load();
@@ -257,7 +258,6 @@ public class CheckOutController {
         Parent dashboardParent = loader.load();
         CheckinController checkinController = loader.getController();
         checkinController.setEmployeeID(employeeID);
-        System.out.println("employeeID in DashboardController: " + employeeID); // Add this line
         Scene dashboardScene = new Scene(dashboardParent);
         Stage window = (Stage) navCheckinButton.getScene().getWindow();
         window.setScene(dashboardScene);

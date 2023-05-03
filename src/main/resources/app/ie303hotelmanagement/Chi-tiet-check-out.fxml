@@ -275,6 +275,7 @@
                      <columns>
                         <TableColumn fx:id="usedServiceIDColumn" prefWidth="75.0" text="MÃ DỊCH VỤ" />
                         <TableColumn fx:id="usedServiceNameColumn" prefWidth="75.0" text="TÊN DỊCH VỤ" />
+                        <TableColumn fx:id="usedServiceRoom" prefWidth="75.0" text="PHÒNG" />
                         <TableColumn fx:id="usedServiceQuantityColumn" prefWidth="75.0" text="SỐ LƯỢNG" />
                         <TableColumn fx:id="usedServicePriceColumn" prefWidth="75.0" text="GIÁ" />
                         <TableColumn fx:id="usedServiceTotalColumn" prefWidth="75.0" text="TỔNG" />
