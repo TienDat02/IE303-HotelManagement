@@ -37,7 +37,7 @@
                   <Font name="Tahoma Bold" size="24.0" />
                </font>
             </Button>
-            <Button fx:id="navCheckinButton" mnemonicParsing="false" onAction="#handleNavServiceButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
+            <Button fx:id="navCheckinButton" mnemonicParsing="false" onAction="#handleNavCheckinButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>
