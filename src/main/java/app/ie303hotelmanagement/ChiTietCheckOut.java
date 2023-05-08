@@ -98,6 +98,8 @@ public class ChiTietCheckOut {
     @FXML
     private TableColumn<UsedService, String> usedServiceNameColumn;
     @FXML
+    private TableColumn<UsedService, Integer> usedServiceRoom;
+    @FXML
     private TableColumn<UsedService, Float> usedServicePriceColumn;
     @FXML
     private TableColumn<UsedService, Integer> usedServiceQuantityColumn;
@@ -203,7 +205,7 @@ public class ChiTietCheckOut {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT service.Service_ID, service.Service_Name, room_service.Service_Quantity, service.Service_Price FROM service INNER JOIN room_service ON service.Service_ID = room_service.Service_ID WHERE room_service.Room_ID = '" + roomID + "';");
             while (rs.next()) {
-                UsedService usedService = new UsedService(rs.getString("Service_ID"), rs.getString("Service_Name"),rs.getFloat("Service_Price") , rs.getInt("Service_Quantity"), rs.getFloat("Service_Price") * rs.getInt("Service_Quantity"));
+                UsedService usedService = new UsedService(rs.getString("Service_ID"), rs.getString("Service_Name"), roomID, rs.getFloat("Service_Price") , rs.getInt("Service_Quantity"), rs.getFloat("Service_Price") * rs.getInt("Service_Quantity"));
                 usedServiceList.add(usedService);
             }
             conn.close();
@@ -263,6 +265,7 @@ public class ChiTietCheckOut {
         ArrayList<UsedService> usedServiceList = new ArrayList<>();
         usedServiceNameColumn.setCellValueFactory(new PropertyValueFactory<>("ServiceName"));
         usedServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("ServiceID"));
+        usedServiceRoom.setCellValueFactory(new PropertyValueFactory<>("RoomID"));
         usedServicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("Price"));
         usedServiceQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
         usedServiceTotalColumn.setCellValueFactory(new PropertyValueFactory<>("Total"));
@@ -281,7 +284,7 @@ public class ChiTietCheckOut {
 
 
 
-    public void handleAddUsedServiceButton(MouseEvent event) {
+    /*public void handleAddUsedServiceButton(MouseEvent event) {
         ServiceForCustomer selectedService = service.getSelectionModel().getSelectedItem();
         if (selectedService != null) {
             int quantity = numberOfUsed.getValue();
@@ -291,7 +294,7 @@ public class ChiTietCheckOut {
             displayUsedServiceList.add(usedService);
         }
         calculateTotalPrice();
-    }
+    }*/
 
     public void handleRemoveUsedServiceButton(MouseEvent event) {
         UsedService selectedUsedService = usedService.getSelectionModel().getSelectedItem();

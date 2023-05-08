@@ -354,6 +354,7 @@
                         <Font name="Tahoma Bold" size="40.0" />
                      </font>
                   </Text>
+                  <ImageView fx:id="avatar" fitHeight="446.0" fitWidth="404.0" layoutX="39.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true" />
                </children></Pane>
             <Text layoutX="54.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DASHBOARD" wrappingWidth="407.7509765625" AnchorPane.topAnchor="60.0">
                <font>

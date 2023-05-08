@@ -15,6 +15,8 @@ import javafx.util.Callback;
 import java.sql.*;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 public class CheckinController {
@@ -44,6 +46,10 @@ public class CheckinController {
     private TextField inputYearOfBirth;
     @FXML
     private TextField inputPhone;
+    @FXML
+    private TextField inputCheckinTime;
+    @FXML
+    private TextField inputCheckoutTime;
     @FXML
     private TableView<Room> roomTable;
     @FXML
@@ -152,85 +158,91 @@ public class CheckinController {
     @FXML
     public void handleReservateButton(ActionEvent event) throws IOException {
         try {
-        Connection conn = DriverManager.getConnection(connectionString, username, password);
-        String[] roomIDs = inputRoom.getText().split(","); // split input by comma
-        boolean allRoomsAvailable = true;
-        for (String roomID : roomIDs) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM room WHERE Room_ID = ?");
-            stmt.setString(1, roomID);
-            ResultSet rs = stmt.executeQuery();
-            if (!rs.next() || !rs.getString("Room_Status").equals("Trống")) {
-                allRoomsAvailable = false;
-                break;
-            }
-        }
-        if (!allRoomsAvailable) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Một hoặc nhiều phòng không khả dụng, vui lòng thử lại.");
-            alert.showAndWait();
-        } else if (inputCCCD.getText().isEmpty() || inputName.getText().isEmpty() || inputYearOfBirth.getText().isEmpty() || inputPhone.getText().isEmpty() || inputRoom.getText().isEmpty() || inputCheckinDate.getValue() == null || inputNumberOfGuest.getText().isEmpty() || inputCheckoutDate.getValue() == null ) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Vui lòng điền đầy đủ thông tin.");
-            alert.showAndWait();
-        } else if (inputCheckinDate.getValue().isAfter(inputCheckoutDate.getValue()) || inputCheckinDate.getValue().isBefore(LocalDate.now()) || inputCheckoutDate.getValue().isBefore(LocalDate.now())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Ngày đến và ngày đi không hợp lệ.");
-            alert.showAndWait();
-        } else {
-            LocalDate checkinDate = inputCheckinDate.getValue();
-            LocalDate checkoutDate = inputCheckoutDate.getValue();
+            Connection conn = DriverManager.getConnection(connectionString, username, password);
+            String[] roomIDs = inputRoom.getText().split(","); // split input by comma
+            boolean allRoomsAvailable = true;
             for (String roomID : roomIDs) {
-                PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO reservation (Guest_ID, Employee_ID, Room_ID, Reserve_Date, Expected_Checkin_Date, Expected_Checkout_Date, Number_OfGuest, Reservation_Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Đặt trước')");
-                stmt2.setString(1, inputCCCD.getText());
-                stmt2.setString(2, employeeID);
-                stmt2.setString(3, roomID);
-                stmt2.setString(4, LocalDate.now().toString());
-                stmt2.setString(5, checkinDate.toString());
-                stmt2.setString(6, checkoutDate.toString());
-                stmt2.setString(7, inputNumberOfGuest.getText());
-                stmt2.executeUpdate();
-
-                PreparedStatement stmt3 = conn.prepareStatement("UPDATE room SET Room_Status = 'Đặt trước' WHERE Room_ID = ?");
-                stmt3.setString(1, roomID);
-                stmt3.executeUpdate();
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM room WHERE Room_ID = ?");
+                stmt.setString(1, roomID);
+                ResultSet rs = stmt.executeQuery();
+                if (!rs.next() || !rs.getString("Room_Status").equals("Trống")) {
+                    allRoomsAvailable = false;
+                    break;
+                }
             }
+            if (!allRoomsAvailable) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Một hoặc nhiều phòng không khả dụng, vui lòng thử lại.");
+                alert.showAndWait();
+            } else if (inputCCCD.getText().isEmpty() || inputName.getText().isEmpty() || inputYearOfBirth.getText().isEmpty() || inputPhone.getText().isEmpty() || inputRoom.getText().isEmpty() || inputCheckinDate.getValue() == null || inputNumberOfGuest.getText().isEmpty() || inputCheckoutDate.getValue() == null ) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Vui lòng điền đầy đủ thông tin.");
+                alert.showAndWait();
+            } else if (inputCheckinDate.getValue().isAfter(inputCheckoutDate.getValue()) || inputCheckinDate.getValue().isBefore(LocalDate.now()) || inputCheckoutDate.getValue().isBefore(LocalDate.now())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Ngày đến và ngày đi không hợp lệ.");
+                alert.showAndWait();
+            } else {
+                LocalDate checkinDate = inputCheckinDate.getValue();
+                LocalTime checkinTime = LocalTime.parse(inputCheckinTime.getText());
+                LocalDateTime expectedCheckinDateTime = LocalDateTime.of(checkinDate, checkinTime);
 
-            PreparedStatement stmt4 = conn.prepareStatement("SELECT * FROM guest WHERE Guest_ID = ?");
-            stmt4.setString(1, inputCCCD.getText());
-            ResultSet rs2 = stmt4.executeQuery();
-            if (!rs2.next()) {
-                PreparedStatement stmt5 = conn.prepareStatement("INSERT INTO guest (Guest_ID, Guest_Name, Guest_Phone, Guest_BirthYear, Guest_Notes) VALUES (?, ?, ?, ?, ?)");
-                stmt5.setString(1, inputCCCD.getText());
-                stmt5.setString(2, inputName.getText());
-                stmt5.setString(3, inputPhone.getText());
-                stmt5.setString(4, inputYearOfBirth.getText());
-                stmt5.setString(5, inputNote.getText());
-                stmt5.executeUpdate();
+                LocalDate checkoutDate = inputCheckoutDate.getValue();
+                LocalTime checkoutTime = LocalTime.parse(inputCheckoutTime.getText());
+                LocalDateTime expectedCheckoutDateTime = LocalDateTime.of(checkoutDate, checkoutTime);
+
+                for (String roomID : roomIDs) {
+                    PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO reservation (Guest_ID, Employee_ID, Room_ID, Reserve_Date, Expected_Checkin_Date, Expected_Checkout_Date, Number_OfGuest, Reservation_Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Đặt trước')");
+                    stmt2.setString(1, inputCCCD.getText());
+                    stmt2.setString(2, employeeID);
+                    stmt2.setString(3, roomID);
+                    stmt2.setString(4, LocalDateTime.now().toString());
+                    stmt2.setString(5, expectedCheckinDateTime.toString());
+                    stmt2.setString(6, expectedCheckoutDateTime.toString());
+                    stmt2.setString(7, inputNumberOfGuest.getText());
+                    stmt2.executeUpdate();
+
+                    PreparedStatement stmt3 = conn.prepareStatement("UPDATE room SET Room_Status = 'Đặt trước' WHERE Room_ID = ?");
+                    stmt3.setString(1, roomID);
+                    stmt3.executeUpdate();
+                }
+
+                PreparedStatement stmt4 = conn.prepareStatement("SELECT * FROM guest WHERE Guest_ID = ?");
+                stmt4.setString(1, inputCCCD.getText());
+                ResultSet rs2 = stmt4.executeQuery();
+                if (!rs2.next()) {
+                    PreparedStatement stmt5 = conn.prepareStatement("INSERT INTO guest (Guest_ID, Guest_Name, Guest_Phone, Guest_BirthYear, Guest_Notes) VALUES (?, ?, ?, ?, ?)");
+                    stmt5.setString(1, inputCCCD.getText());
+                    stmt5.setString(2, inputName.getText());
+                    stmt5.setString(3, inputPhone.getText());
+                    stmt5.setString(4, inputYearOfBirth.getText());
+                    stmt5.setString(5, inputNote.getText());
+                    stmt5.executeUpdate();
+                }
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Thành công");
+                alert.setHeaderText("Đặt phòng thành công.");
+                alert.showAndWait();
+                //reload checkin page
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
+                Parent parent = loader.load();
+                CheckinController checkinController = loader.getController();
+                checkinController.setEmployeeID(employeeID);
+                Scene dashboardScene = new Scene(parent);
+                Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                window.setScene(dashboardScene);
             }
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Thành công");
-            alert.setHeaderText("Đặt phòng thành công.");
+            conn.close();
+        } catch (SQLException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Không thể kết nối đến cơ sở dữ liệu.");
             alert.showAndWait();
-            //reload checkin page
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-            Parent parent = loader.load();
-            CheckinController checkinController = loader.getController();
-            checkinController.setEmployeeID(employeeID);
-            Scene dashboardScene = new Scene(parent);
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setScene(dashboardScene);
-        }
-        conn.close();
-    } catch (SQLException | IOException e) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi");
-        alert.setHeaderText("Không thể kết nối đến cơ sở dữ liệu.");
-        alert.showAndWait();
-        e.printStackTrace();
+            e.printStackTrace();
         }
     }
     @FXML
@@ -267,14 +279,18 @@ public class CheckinController {
                 alert.setHeaderText("Ngày đến và ngày đi không hợp lệ.");
                 alert.showAndWait();
             } else {
-                LocalDate checkinDate = LocalDate.now();
-                LocalDate checkoutDate = inputCheckoutDate.getValue();
+                LocalDate checkinDate = inputCheckinDate.getValue();
+                LocalTime checkinTime = LocalTime.parse(inputCheckinTime.getText());
+                LocalDateTime expectedCheckinDateTime = LocalDateTime.of(checkinDate, checkinTime);
+
+                LocalDateTime checkinDateTime = LocalDateTime.of(inputCheckinDate.getValue(),LocalTime.parse(inputCheckinTime.getText()));
+                LocalDateTime checkoutDateTime = LocalDateTime.of(inputCheckoutDate.getValue(), LocalTime.parse(inputCheckoutTime.getText()));
                 for (String roomID : roomIDs) {
                     PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO Checkin (Guest_ID, Room_ID, Checkin_Date, Expected_Checkout_Date, Number_OfGuest, Employee_ID) VALUES (?, ?, ?, ?, ?, ?)");
                     stmt2.setString(1, inputCCCD.getText());
                     stmt2.setString(2, roomID);
-                    stmt2.setString(3, checkinDate.toString());
-                    stmt2.setString(4, checkoutDate.toString());
+                    stmt2.setTimestamp(3, Timestamp.valueOf(checkinDateTime));
+                    stmt2.setTimestamp(4, Timestamp.valueOf(checkoutDateTime));
                     stmt2.setInt(5, Integer.parseInt(inputNumberOfGuest.getText()));
                     stmt2.setString(6, employeeID);
                     stmt2.executeUpdate();

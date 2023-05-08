@@ -1,4 +1,10 @@
 package app.ie303hotelmanagement;
+
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.JFXPanel;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,9 +13,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
+import win.zqxu.jrviewer.JRViewerFX;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
@@ -36,39 +47,230 @@ public class ReportController {
     private Button navReportButton;
     @FXML
     private Button LogoutButton;
-    private String connectUrl = DataConnector.getDatabaseUrl();
-    private String username = DataConnector.getUsername();
-    private String password = DataConnector.getPassword();
+    @FXML
+    private Button printReport;
+    @FXML
+    private ComboBox<String> reportType = new ComboBox<>();
+    @FXML
+    private Pane reportScene;
+    private final String connectUrl = DataConnector.getDatabaseUrl();
+    private final String username = DataConnector.getUsername();
+    private final String password = DataConnector.getPassword();
+
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
-    public void PrintEmployeeList() throws JRException, SQLException, ClassNotFoundException {
+    @FXML
+    void initialize() {
+        ObservableList<String> options = FXCollections.observableArrayList(
+                "Danh sách nhân viên",
+                "Báo cáo checkin",
+                "Báo cáo checkout",
+                "Báo cáo doanh thu"
+        );
+        reportType.setItems(options);
+    }
+
+    @FXML
+    void handleReportType() throws SQLException, JRException, IOException {
+        System.out.println("Report type selected: " + reportType.getValue());
+        // Get the selected report type from the ComboBox
+        String selectedReport = reportType.getValue();
+        // Check if a report type is selected
+        if (selectedReport != null) {
+            // Load the report file based on the selected report type
+            String reportFile;
+            if (selectedReport.equals("Danh sách nhân viên")) {
+                reportFile = "src/main/resources/Report/EmployeeReport.jrxml";
+            } else if (selectedReport.equals("Báo cáo checkin")) {
+                reportFile = "src/main/resources/Report/Checkin.jrxml";
+            } else if (selectedReport.equals("Báo cáo checkout")) {
+                reportFile = "src/main/resources/Report/Check-out.jrxml";
+            } else if (selectedReport.equals("Báo cáo doanh thu")) {
+                reportFile = "src/main/resources/Report/DoanhThu.jrxml";
+            } else {
+                // Handle invalid report type
+                return;
+            }
+            // Compile the report
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportFile);
+
+            // Fill the report with data
+            Connection connection = DriverManager.getConnection(connectUrl, username, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = null;
+            if (selectedReport.equals("Danh sách nhân viên")) {
+                resultSet = statement.executeQuery("SELECT * FROM employee");
+            } else if (selectedReport.equals("Báo cáo checkin")) {
+                resultSet = statement.executeQuery("SELECT * FROM checkin_history JOIN employee ON checkin_history.Employee_ID = employee.Employee_ID JOIN guest ON checkin_history.Guest_ID = guest.Guest_ID");
+            } else if (selectedReport.equals("Báo cáo checkout")) {
+                resultSet = statement.executeQuery("SELECT * FROM hotelmanagement.checkout, guest, employee WHERE checkout.Guest_ID = guest.Guest_ID AND checkout.Employee_ID = employee.Employee_ID");
+            } else if (selectedReport.equals("Báo cáo doanh thu")) {
+                resultSet = statement.executeQuery("SELECT * FROM doanhthu");
+            }
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, new JRResultSetDataSource(resultSet));
+
+            // Create a SwingNode to hold the JRViewerFX
+            SwingNode swingNode = new SwingNode();
+
+            // Create a JFXPanel to hold the JRViewerFX
+            JFXPanel jfxPanel = new JFXPanel();
+
+            // Create a JRViewerFX to display the report
+            JRViewerFX jrViewerFX = new JRViewerFX(jasperPrint);
+            jrViewerFX.setPrefHeight(reportScene.getHeight());
+            jrViewerFX.setPrefWidth(reportScene.getWidth());
+
+            // Add the JRViewerFX to the JFXPanel
+            jfxPanel.setScene(new Scene(jrViewerFX));
+
+            // Add the JFXPanel to the SwingNode
+            swingNode.setContent(jfxPanel);
+
+            // Clear the reportScene Pane before adding the new report
+            reportScene.getChildren().clear();
+
+            // Add the SwingNode to the reportScene Pane
+            reportScene.getChildren().add(swingNode);
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        }
+    }
+
+    @FXML
+    void handleBtnPrintReport(ActionEvent event) throws IOException, JRException, SQLException {
         // Establish a connection to the database
         Connection connection = DriverManager.getConnection(connectUrl, username, password);
 
         // Create a statement
         Statement statement = connection.createStatement();
 
-        // Execute a query and get the result set
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
+        // Get the selected report type from the ComboBox
+        String selectedReport = reportType.getValue();
 
-        // Convert the result set to a JRDataSource
-        JRDataSource dataSource = new JRResultSetDataSource(resultSet);
+        // Execute a query and get the result set based on the selected report type
+        ResultSet resultSet;
+        if (selectedReport.equals("Danh sách nhân viên")) {
+            resultSet = statement.executeQuery("SELECT * FROM employee");
 
-        // Compile the report
-        JasperReport jasperReport = JasperCompileManager.compileReport("C:/Users/TienDat/JaspersoftWorkspace/Employee/EmployeeReport.jrxml");
+            // Convert the result set to a JRDataSource
+            JRDataSource dataSource = new JRResultSetDataSource(resultSet);
 
-        // Fill the report with data
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+            // Compile the report
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/Report/EmployeeReport.jrxml");
 
-        // Export the report to a .docx file
-        JasperExportManager.exportReportToHtmlFile(jasperPrint, "C:/Users/TienDat/JaspersoftWorkspace/Employee/EmployeeReport.html");
+            // Fill the report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            // Create a FileChooser dialog
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Chọn nơi lưu trữ");
+
+            // Set the initial directory for the dialog
+            File initialDirectory = new File(System.getProperty("user.home"));
+            fileChooser.setInitialDirectory(initialDirectory);
+
+            // Show the dialog and get the chosen file path
+            File chosenFile = fileChooser.showSaveDialog(null);
+            String exportPath = chosenFile.getAbsolutePath();
+
+            // Export the report to the chosen file path
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
+
+        } else if (selectedReport.equals("Báo cáo checkin")) {
+            resultSet = statement.executeQuery("SELECT * FROM checkin_history JOIN employee ON checkin.Employee_ID = employee.Employee_ID JOIN guest ON checkin.Guest_ID = guest.Guest_ID");
+
+            // Convert the result set to a JRDataSource
+            JRDataSource dataSource = new JRResultSetDataSource(resultSet);
+
+            // Compile the report
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/Report/Checkin.jrxml");
+
+            // Fill the report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            // Create a FileChooser dialog
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Chọn nơi lưu trữ");
+
+            // Set the initial directory for the dialog
+            File initialDirectory = new File(System.getProperty("user.home"));
+            fileChooser.setInitialDirectory(initialDirectory);
+
+            // Show the dialog and get the chosen file path
+            File chosenFile = fileChooser.showSaveDialog(null);
+            String exportPath = chosenFile.getAbsolutePath();
+
+            // Export the report to the chosen file path
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
+
+        } else if (selectedReport.equals("Báo cáo checkout")) {
+            resultSet = statement.executeQuery("SELECT * FROM hotelmanagement.checkout, guest, employee WHERE checkout.Guest_ID = guest.Guest_ID AND checkout.Employee_ID = employee.Employee_ID");
+
+            // Convert the result set to a JRDataSource
+            JRDataSource dataSource = new JRResultSetDataSource(resultSet);
+
+            // Compile the report
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/Report/Check-out.jrxml");
+
+            // Fill the report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            // Create a FileChooser dialog
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Chọn nơi lưu trữ");
+
+            // Set the initial directory for the dialog
+            File initialDirectory = new File(System.getProperty("user.home"));
+            fileChooser.setInitialDirectory(initialDirectory);
+
+            // Show the dialog and get the chosen file path
+            File chosenFile = fileChooser.showSaveDialog(null);
+            String exportPath = chosenFile.getAbsolutePath();
+
+            // Export the report to the chosen file path
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
+
+        } else if (selectedReport.equals("Báo cáo doanh thu")) {
+            resultSet = statement.executeQuery("SELECT * FROM DoanhThu");
+
+            // Convert the result set to a JRDataSource
+            JRDataSource dataSource = new JRResultSetDataSource(resultSet);
+
+            // Compile the report
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/Report/Checkout.jrxml");
+
+            // Fill the report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            // Create a FileChooser dialog
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Chọn nơi lưu trữ");
+
+            // Set the initial directory for the dialog
+            File initialDirectory = new File(System.getProperty("user.home"));
+            fileChooser.setInitialDirectory(initialDirectory);
+
+            // Show the dialog and get the chosen file path
+            File chosenFile = fileChooser.showSaveDialog(null);
+            String exportPath = chosenFile.getAbsolutePath();
+
+            // Export the report to the chosen file path
+            JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
+
+        } else {
+            // Handle invalid report type
+            return;
+        }
 
         // Close the result set, statement, and connection
         resultSet.close();
         statement.close();
         connection.close();
     }
+
     @FXML
     public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
@@ -79,6 +281,7 @@ public class ReportController {
         dashboardController.initialize(employeeID);
         window.setScene(dashboardScene);
     }
+
     //Navitation
     @FXML
     public void handleNavCustomerButton(ActionEvent event) throws IOException, SQLException {
@@ -90,8 +293,9 @@ public class ReportController {
         Stage window = (Stage) navCustomerButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
+
     @FXML
-    public void handleNavServiceButton(ActionEvent event) throws IOException{
+    public void handleNavServiceButton(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Service.fxml"));
         Parent dashboardParent = loader.load();
         ServiceController serviceController = loader.getController();
@@ -100,8 +304,9 @@ public class ReportController {
         Stage window = (Stage) navServiceButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
+
     @FXML
-    public void handleNavRoomButton(ActionEvent event) throws IOException{
+    public void handleNavRoomButton(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
         Parent dashboardParent = loader.load();
         RoomController roomController = loader.getController();
@@ -133,6 +338,7 @@ public class ReportController {
         Stage window = (Stage) navCheckoutButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
+
     @FXML
     public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
@@ -143,8 +349,9 @@ public class ReportController {
         Stage window = (Stage) navEmployeeButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
+
     @FXML
-    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException{
+    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Report.fxml"));
         Parent dashboardParent = loader.load();
         ReportController reportController = loader.getController();
@@ -153,8 +360,9 @@ public class ReportController {
         Stage window = (Stage) navReportButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
+
     @FXML// đây là hàm để đăng xuất
-    void handleLogoutButton(ActionEvent event) throws IOException {
+    public void handleLogoutButton(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có muốn đăng xuất?");
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
@@ -167,3 +375,4 @@ public class ReportController {
         }
     }
 }
+

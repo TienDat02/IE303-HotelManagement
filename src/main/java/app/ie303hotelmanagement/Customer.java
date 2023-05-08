@@ -51,4 +51,6 @@ public class Customer {
     public void setNote(String note) {
         this.note = note;
     }
+
+
 }

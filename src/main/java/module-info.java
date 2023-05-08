@@ -6,6 +6,9 @@ module com.example.ie303hotelmanagement {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires jasperreports;
+    requires javafx.swing;
+    requires jrviewer.fx;
+    requires pdfbox;
 
     opens app.ie303hotelmanagement to javafx.fxml;
     exports app.ie303hotelmanagement;

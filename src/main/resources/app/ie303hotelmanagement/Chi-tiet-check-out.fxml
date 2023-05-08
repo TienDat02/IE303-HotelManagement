@@ -244,7 +244,7 @@
                         <Font name="Times New Roman" size="24.0" />
                      </font>
                   </Text>
-                  <Button layoutX="815.0" layoutY="599.0" mnemonicParsing="false" onMouseClicked="#handleAddUsedServiceButton" prefHeight="31.0" prefWidth="97.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 30 30 30; -fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 30 30 30;" text="Thêm">
+                  <Button layoutX="815.0" layoutY="599.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="97.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 30 30 30; -fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 30 30 30;" text="Thêm">
                      <font>
                         <Font name="Arrus-Black" size="14.0" />
                      </font>

@@ -1,5 +1,8 @@
 package app.ie303hotelmanagement;
 
+
+import animation.ButtonAnimation;
+import animation.TextFieldAnimation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,11 +12,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
+
 
 public class DashboardController {
     @FXML
@@ -54,6 +63,9 @@ public class DashboardController {
     private Button navCustomerButton;
     @FXML
     private Button navReportButton;
+    @FXML
+    private ImageView avatar;
+    private String employeeName;
 
     private String databaseUrl = DataConnector.getDatabaseUrl();
     private String username = DataConnector.getUsername();
@@ -79,8 +91,38 @@ public class DashboardController {
             email.setText(rs2.getString("Employee_Email"));
             position.setText(rs2.getString("Employee_Position"));
             cccd.setText(rs2.getString("Employee_CCCD"));
+
+
         }
-        navDashboardButton.setText("Xin chào, " + nameId1.getText());
+        //set avatar
+        String imageName = employeeID + ".png";
+        File imageFile = new File("src/main/resources/images/" + imageName);
+        if (!imageFile.exists()) {
+            imageName = "default.png"; // assuming the default image's name is default.png
+            imageFile = new File("src/main/resources/images/" + imageName);
+        }
+        Image image = new Image(imageFile.toURI().toString());
+        avatar.setImage(image);
+        Rectangle clip = new Rectangle(avatar.getFitWidth(), avatar.getFitHeight());
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        avatar.setClip(clip);
+        //set animation
+        String fullName = nameId1.getText();
+        String[] nameParts = fullName.split(" ");
+        String firstName = nameParts[nameParts.length - 1];
+        navDashboardButton.setText("Xin chào, " + firstName);
+        ButtonAnimation.addTextAnimation(navDashboardButton, navDashboardButton.getText());
+
+        TextFieldAnimation.animateTextField(employeeIDTxt, employeeIDTxt.getText());
+        TextFieldAnimation.animateTextField(name, name.getText());
+        TextFieldAnimation.animateTextField(dateOfBirth, dateOfBirth.getText());
+        TextFieldAnimation.animateTextField(gender, gender.getText());
+        TextFieldAnimation.animateTextField(address, address.getText());
+        TextFieldAnimation.animateTextField(phone, phone.getText());
+        TextFieldAnimation.animateTextField(email, email.getText());
+        TextFieldAnimation.animateTextField(position, position.getText());
+        TextFieldAnimation.animateTextField(cccd, cccd.getText());
     }
 
     //Navigation

@@ -1,10 +1,5 @@
 package app.ie303hotelmanagement;
 
-import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Optional;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 
 public class CheckOutController {
@@ -88,7 +88,7 @@ public class CheckOutController {
             // Update status of room from "Đang thuê" to "Chờ trả" if the check-out date is today
             PreparedStatement psUpdateRoomStatus = conn.prepareStatement("UPDATE room SET Room_Status = 'Chờ trả' WHERE Room_Status = 'Đang thuê' and Room_ID IN (SELECT Room_ID FROM checkin WHERE curdate() >= Expected_Checkout_Date)");
             psUpdateRoomStatus.executeUpdate();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chở trả'");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chở trả' OR Room_Status = 'Đang thuê'");
             ResultSet rs = ps.executeQuery();
             int i = 1;
             while (rs.next()) {
@@ -147,8 +147,9 @@ public class CheckOutController {
 
 
             // Get the all the rooms that the customer hired
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chờ trả' and Room_ID IN (SELECT Room_ID FROM checkin WHERE Guest_ID = ?)");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chờ trả' OR  Room_Status = 'Đang thuê' and Room_ID IN (SELECT Room_ID FROM checkin WHERE Guest_ID = ?)");
             ps.setString(1, customerDisplay.get(0).getCccd());
+            String guestID = customerDisplay.get(0).getCccd();
             ResultSet rs = ps.executeQuery();
 
             // Add all the rooms to the list to use in the next scene
@@ -161,17 +162,16 @@ public class CheckOutController {
 
 
             // Load the next scene
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Chi-tiet-check-out.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("draft.fxml"));
             Parent root = loader.load();
 
-            ChiTietCheckOut controller = loader.<ChiTietCheckOut>getController();
+            //edited here
+            CheckoutDetails controller = loader.<CheckoutDetails>getController();
 
             // Set the customer list to the next scene
-            controller.setCustomerList(customerDisplay);
+            controller.setCustomer(guestID);
             // Set the room list to the next scene
-            controller.setCustomerRoom(roomDisplay);
             // Set the room ID to the next scene so we can easily find customer base on room ID
-            controller.setRoomID(selectedRoom.getRoomID());
             // Set the employee ID to the next scene
             controller.setEmployeeID(employeeID);
             // Init the data to the next scene
@@ -193,7 +193,7 @@ public class CheckOutController {
             // Update status of room from "Đang thuê" to "Chờ trả" if the check-out date is today
             PreparedStatement psUpdateRoomStatus = conn.prepareStatement("UPDATE room SET Room_Status = 'Chờ trả' WHERE Room_Status = 'Đang thuê' and Room_ID IN (SELECT Room_ID FROM checkin WHERE curdate() >= Expected_Checkout_Date)");
             psUpdateRoomStatus.executeUpdate();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chờ trả'");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chờ trả' OR Room_Status = 'Đang thuê'");
             ResultSet rs = ps.executeQuery();
             int i = 1;
             while (rs.next()) {
