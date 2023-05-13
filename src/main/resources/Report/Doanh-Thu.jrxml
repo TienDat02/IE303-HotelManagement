@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Doanh-Thu" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables">
-		<![CDATA[aG90ZWxtYW5hZ2VtZW50LmVtcGxveWVlIEFTICw3MiwxMDMsMmQ3NTI4ZjMtMWVlOS00MWIwLWJl
-ZmMtY2EwZmMwZDMxMDUyOw==]]>
+		<![CDATA[aG90ZWxtYW5hZ2VtZW50LmRvYW5odGh1IEFTICw1OSwzMCw3NmY4NGU2MC0xZTVkLTRkODgtYWMz
+Zi0yNThlYjkwMzM0YzY7]]>
 	</property>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="HotelManagement"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
@@ -62,58 +62,52 @@ ZmMtY2EwZmMwZDMxMDUyOw==]]>
 		</queryString>
 	</subDataset>
 	<queryString language="SQL">
-		<![CDATA[SELECT `Employee_ID`,
-	`Employee_Name`,
-	`Employee_Gender`,
-	`Employee_Position`,
-	`Employee_CCCD`,
-	`Employee_Email`,
-	`Employee_Phone`,
-	`Employee_BeginDate`
-FROM hotelmanagement.employee]]>
+		<![CDATA[SELECT `Bill_ID`,
+	`Guest_Name`,
+	`Room_ID`,
+	`Bill_Date`,
+	`TienPhong`,
+	`TienDichVu`,
+	`Total_Cost`
+FROM hotelmanagement.doanhthu]]>
 	</queryString>
-	<field name="Employee_ID" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_ID"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_ID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="Bill_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Bill_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="Bill_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
-	<field name="Employee_Name" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_Name"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_Name"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="Guest_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Guest_Name"/>
+		<property name="com.jaspersoft.studio.field.label" value="Guest_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
-	<field name="Employee_Gender" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_Gender"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_Gender"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="Room_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Room_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="Room_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
-	<field name="Employee_Position" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_Position"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_Position"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="Bill_Date" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="Bill_Date"/>
+		<property name="com.jaspersoft.studio.field.label" value="Bill_Date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
-	<field name="Employee_CCCD" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_CCCD"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_CCCD"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="TienPhong" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="TienPhong"/>
+		<property name="com.jaspersoft.studio.field.label" value="TienPhong"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
-	<field name="Employee_Email" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_Email"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_Email"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="TienDichVu" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TienDichVu"/>
+		<property name="com.jaspersoft.studio.field.label" value="TienDichVu"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
-	<field name="Employee_Phone" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_Phone"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_Phone"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
-	</field>
-	<field name="Employee_BeginDate" class="java.sql.Date">
-		<property name="com.jaspersoft.studio.field.name" value="Employee_BeginDate"/>
-		<property name="com.jaspersoft.studio.field.label" value="Employee_BeginDate"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	<field name="Total_Cost" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Total_Cost"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total_Cost"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doanhthu"/>
 	</field>
 	<title>
-		<band height="126" splitType="Stretch">
+		<band height="149" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<line>
 				<reportElement x="0" y="80" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
@@ -121,28 +115,12 @@ FROM hotelmanagement.employee]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
-			<staticText>
-				<reportElement x="0" y="90" width="556" height="25" uuid="d2059fb8-af9e-410d-924a-c406467c22c8">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DANH SÁCH NHÂN VIÊN]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="80" width="556" height="1" uuid="3ace3753-5ed4-4ffb-847b-9c8cb46cffb0">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-			</line>
 			<image hAlign="Center">
-				<reportElement x="0" y="0" width="65" height="60" uuid="4a68aa0d-c673-42be-8ab5-bbb13a706a06"/>
+				<reportElement x="0" y="0" width="65" height="60" uuid="5b8c01f4-29ba-4f13-a660-31cd62370f63"/>
 				<imageExpression><![CDATA["src/main/resources/app/ie303hotelmanagement/Logo.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="95" y="0" width="210" height="25" uuid="aa288171-25bc-4cb3-8892-216c5efa95ac">
+				<reportElement x="95" y="0" width="210" height="25" uuid="6838d99f-4e4f-48c3-82a7-ed12fbd818d3">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -152,35 +130,41 @@ FROM hotelmanagement.employee]]>
 				<text><![CDATA[Room Master]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="95" y="55" width="205" height="15" uuid="da7930ee-ca78-43da-af65-f9966a345b4b"/>
+				<reportElement x="95" y="55" width="205" height="15" uuid="bee96ff4-6c8a-4e52-8518-efd7bf4bd723"/>
 				<text><![CDATA[SĐT: 0123456789]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="95" y="25" width="205" height="15" uuid="43b727a9-88e1-49c7-901d-7c39ee519be7"/>
+				<reportElement x="95" y="25" width="205" height="15" uuid="2453bc46-265e-43e5-a19e-ed05834dfedc"/>
 				<text><![CDATA[Khu phố 6]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="95" y="40" width="205" height="15" uuid="b5d379ed-428a-4022-9979-b3f79b81d68a"/>
+				<reportElement x="95" y="40" width="205" height="15" uuid="a5bd988b-7c4a-494e-84da-16eab49e6eb8"/>
 				<text><![CDATA[Linh Trung, Thủ Đức, TPHCM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="415" y="10" width="50" height="20" uuid="0be26ce9-2d31-4bba-aff4-e98a4ec18506"/>
+				<reportElement x="415" y="10" width="50" height="20" uuid="ceecf3ce-0b3d-4686-b6bb-1a2fe18ac2b7"/>
 				<box rightPadding="4"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Ngày:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="465" y="10" width="84" height="20" uuid="c5c33ae0-4cb6-438a-8367-9ad3d2388661"/>
+				<reportElement x="465" y="10" width="84" height="20" uuid="dcc58b1a-49ba-458f-a498-1dae7c000a56"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="100" width="555" height="30" uuid="112cdc43-41d7-4901-b523-24e010419ab7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BÁO CÁO DOANH THU]]></text>
+			</staticText>
 		</band>
 	</title>
 	<columnHeader>
-		<band height="30">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="29">
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="0" y="0" width="69" height="30" forecolor="#000000" uuid="a1dc011a-ad07-4b1f-9565-058f9a4bcec5">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0730fcb1-98fc-450a-bf6c-d0ba6244250c"/>
+				<reportElement style="Column header" positionType="Float" x="0" y="0" width="79" height="29" forecolor="#000000" uuid="bcebf54c-d4fd-465d-9842-daee5a5443a0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="45b06081-4ad5-45ce-af49-19545b0e6556"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -191,11 +175,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ID]]></text>
+				<text><![CDATA[Mã số hóa đơn]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="69" y="0" width="69" height="30" forecolor="#000000" uuid="3662d450-81b8-428f-8db5-5054c15841b3">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f432d5-3745-448c-a36a-31136dfa3126"/>
+				<reportElement style="Column header" positionType="Float" x="79" y="0" width="79" height="29" forecolor="#000000" uuid="491bfada-c8b5-47b5-9042-9551426517f6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="41fbc7cf-6d0e-49bf-a905-8d18499f0433"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -206,11 +190,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Họ tên]]></text>
+				<text><![CDATA[Khách hàng]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="138" y="0" width="69" height="30" forecolor="#000000" uuid="4aabb870-530d-4836-bba7-69e37b359b2b">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="84b82b7b-a577-41a3-851f-62a50dbd3087"/>
+				<reportElement style="Column header" positionType="Float" x="158" y="0" width="79" height="29" forecolor="#000000" uuid="4b2ff431-5b32-4a70-a5ba-9d4adf3fb135">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="107af128-b3b7-4c43-8d12-76f1d071c0ab"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -221,11 +205,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Giới tính]]></text>
+				<text><![CDATA[Phòng]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="207" y="0" width="69" height="30" forecolor="#000000" uuid="2ec1b927-3aa9-408f-9ee7-0c63d74b6867">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d6ebeb29-68f5-420f-9e28-0d19e6460cb3"/>
+				<reportElement style="Column header" positionType="Float" x="237" y="0" width="79" height="29" forecolor="#000000" uuid="7089d122-cbda-40b9-8e39-efdb8788565c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8b78bda-f8c5-4363-af0a-21dc61ab1e72"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -236,11 +220,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Chức vụ]]></text>
+				<text><![CDATA[Ngày]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="276" y="0" width="69" height="30" forecolor="#000000" uuid="0c5a58a4-93a5-4ef3-8d6c-02611bd83f23">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd70ce59-71c0-4921-9342-3b1e18bb263a"/>
+				<reportElement style="Column header" positionType="Float" x="316" y="0" width="79" height="29" forecolor="#000000" uuid="184219a2-12eb-4876-9be3-d9c06639ab94">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="32a76ffb-4ace-46fd-9688-4a19dd9d6b34"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -251,11 +235,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CCCD]]></text>
+				<text><![CDATA[Tiền Phòng]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="345" y="0" width="69" height="30" forecolor="#000000" uuid="a13c1425-1435-47f4-be33-d3c5570d8313">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="21ec17b9-ff9b-44bf-91e7-13bf8d3a9f68"/>
+				<reportElement style="Column header" positionType="Float" x="395" y="0" width="79" height="29" forecolor="#000000" uuid="c1ea65c1-7c80-4ad9-a5c4-805f17e07a34">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8dbeacc-b6d5-4dd4-8531-8a824e477979"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -266,11 +250,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Email]]></text>
+				<text><![CDATA[Tiền dịch vụ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" positionType="Float" x="414" y="0" width="69" height="30" forecolor="#000000" uuid="2b0637e5-65b7-46c8-8eff-eef74109a508">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51017eca-e5ab-4663-9911-da8fb315a43f"/>
+				<reportElement style="Column header" positionType="Float" x="474" y="0" width="79" height="29" forecolor="#000000" uuid="72c02179-036d-4f66-8739-97d9695b5028">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f19babcd-8fe3-406c-8439-a5cc821d2aae"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -281,31 +265,15 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Số điện thoại]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" positionType="Float" x="483" y="0" width="69" height="30" forecolor="#000000" uuid="0fa697fa-3604-4155-8d94-e35e9a7a4fa9">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="37e28c58-3cf5-412a-8094-5f4cb39273d4"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ngày vào làm]]></text>
+				<text><![CDATA[Tổng]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="76">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="40">
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="0" y="0" width="69" height="76" uuid="f0bd6a94-aca5-43e6-ba52-926c6ebc45f3">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0730fcb1-98fc-450a-bf6c-d0ba6244250c"/>
+				<reportElement style="Detail" positionType="Float" x="0" y="0" width="79" height="40" uuid="01022cd5-7d28-4a9d-93ce-e6e705df63c7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="45b06081-4ad5-45ce-af49-19545b0e6556"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -316,11 +284,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_ID}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Bill_ID}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="69" y="0" width="69" height="76" uuid="1924388e-cc5a-455a-a26e-e66f6b28185f">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29f432d5-3745-448c-a36a-31136dfa3126"/>
+				<reportElement style="Detail" positionType="Float" x="79" y="0" width="79" height="40" uuid="1601332c-e2bb-4d0d-913c-ad90efe30f89">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="41fbc7cf-6d0e-49bf-a905-8d18499f0433"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -331,11 +299,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_Name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Guest_Name}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="138" y="0" width="69" height="76" uuid="6276f3a6-de26-4142-a2b8-88afdd2fe871">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="84b82b7b-a577-41a3-851f-62a50dbd3087"/>
+				<reportElement style="Detail" positionType="Float" x="158" y="0" width="79" height="40" uuid="9cad6bbd-de9a-45ef-a688-d0d010664438">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="107af128-b3b7-4c43-8d12-76f1d071c0ab"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -346,71 +314,11 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_Gender}]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="207" y="0" width="69" height="76" uuid="0b585c00-b206-4b34-acdc-b1e656adc28f">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d6ebeb29-68f5-420f-9e28-0d19e6460cb3"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_Position}]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="276" y="0" width="69" height="76" uuid="68fab8e7-e0c5-400e-a952-0b730a0bedc6">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd70ce59-71c0-4921-9342-3b1e18bb263a"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_CCCD}]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="345" y="0" width="69" height="76" uuid="64e9692a-aa0d-43fc-9ff9-553a8f135710">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="21ec17b9-ff9b-44bf-91e7-13bf8d3a9f68"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_Email}]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="414" y="0" width="69" height="76" uuid="c0325ff6-7fa8-4940-950c-898c7837a442">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51017eca-e5ab-4663-9911-da8fb315a43f"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_Phone}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Room_ID}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="483" y="0" width="69" height="76" uuid="3b94b706-39b8-45ad-a092-d3b032298fdc">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="37e28c58-3cf5-412a-8094-5f4cb39273d4"/>
+				<reportElement style="Detail" positionType="Float" x="237" y="0" width="79" height="40" uuid="f215f8a1-4589-4f32-85d7-641c43b682fc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8b78bda-f8c5-4363-af0a-21dc61ab1e72"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
@@ -421,15 +329,59 @@ FROM hotelmanagement.employee]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Employee_BeginDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Bill_Date}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="316" y="0" width="79" height="40" uuid="ddb5cfb6-2cbf-422d-9ba3-9bb36a3b7521">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="32a76ffb-4ace-46fd-9688-4a19dd9d6b34"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TienPhong}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="395" y="0" width="79" height="40" uuid="be129e49-f248-4a7a-93ae-02af3f0f558d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8dbeacc-b6d5-4dd4-8531-8a824e477979"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TienDichVu}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="474" y="0" width="79" height="40" uuid="e845d727-19f4-41ff-8d81-fef24df65010">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f19babcd-8fe3-406c-8439-a5cc821d2aae"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Cost}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="44">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		<band height="50">
 			<textField>
-				<reportElement x="530" y="20" width="26" height="24" uuid="380d869a-0c7f-4f98-a302-953f31dbfc10"/>
+				<reportElement x="523" y="20" width="26" height="24" uuid="a276a3ab-553b-45e2-bc3d-b5179c12efce"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Arial"/>
 				</textElement>

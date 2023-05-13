@@ -6,9 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
@@ -19,11 +22,25 @@ import java.util.Optional;
 public class EmployeeInfoController {
 
     @FXML
-    private Button reportBtn;
+    private Button navServiceButton;
     @FXML
-    private ImageView image;
+    private Button navRoomButton;
     @FXML
-    private TextField employeeID;
+    private Button navDashboardButton;
+    @FXML
+    private Button navCheckinButton;
+    @FXML
+    private Button navEmployeeButton;
+    @FXML
+    private Button navCheckoutButton;
+    @FXML
+    private Button navCustomerButton;
+    @FXML
+    private Button navReportButton;
+    @FXML
+    private ImageView imgNhanVien;
+    @FXML
+    private TextField employeeIDD;
     @FXML
     private TextField name;
     @FXML
@@ -53,15 +70,16 @@ public class EmployeeInfoController {
     @FXML
     private Button btnSave;
     @FXML
-    private Button checkInButton;
-    @FXML
     private Button LogoutButton;
-
+    private String employeeID;
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+    }
     private String connectUrl = DataConnector.getDatabaseUrl();
     private String username = DataConnector.getUsername();
     private String password = DataConnector.getPassword();
     public void initData(NhanVien nhanVien) {
-        employeeID.setText(nhanVien.getMaNhanVien());
+        employeeIDD.setText(nhanVien.getMaNhanVien());
         name.setText(nhanVien.getTenNhanVien());
         dateOfBirth.setText(nhanVien.getNgaySinh().toString());
         gender.setText(nhanVien.getGioiTinh());
@@ -74,6 +92,19 @@ public class EmployeeInfoController {
         beginDate.setText(nhanVien.getNgayVaoLam().toString());
         status.setText(nhanVien.getTrangThai());
         lblName.setText(nhanVien.getTenNhanVien());
+        //set avatar
+        String imageName = employeeIDD + ".png";
+        File imageFile = new File("src/main/resources/images/" + imageName);
+        if (!imageFile.exists()) {
+            imageName = "default.png"; // assuming the default image's name is default.png
+            imageFile = new File("src/main/resources/images/" + imageName);
+        }
+        Image image = new Image(imageFile.toURI().toString());
+        imgNhanVien.setImage(image);
+        Rectangle clip = new Rectangle(imgNhanVien.getFitWidth(), imgNhanVien.getFitHeight());
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        imgNhanVien.setClip(clip);
     }
 
     @FXML
@@ -91,22 +122,89 @@ public class EmployeeInfoController {
     }
 
     @FXML
-    void handleCheckInButton(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("Checkin.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) checkInButton.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+    public void handleNavCustomerButton(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Customer.fxml"));
+        Parent dashboardParent = loader.load();
+        CustomerController customerController = loader.getController();
+        customerController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navCustomerButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+    @FXML
+    public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+        Parent dashboardParent = loader.load();
+        DashboardController dashboardController = loader.getController();
+        dashboardController.initialize(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navDashboardButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+    @FXML
+    public void handleNavServiceButton(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Service.fxml"));
+        Parent dashboardParent = loader.load();
+        ServiceController serviceController = loader.getController();
+        serviceController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navServiceButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+    @FXML
+    public void handleNavRoomButton(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
+        Parent dashboardParent = loader.load();
+        RoomController roomController = loader.getController();
+        roomController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navRoomButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+
+    @FXML// đây là hàm để chuyển qua trang Checkin
+    public void handleNavCheckinButton(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
+        Parent dashboardParent = loader.load();
+        CheckinController checkinController = loader.getController();
+        checkinController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navCheckinButton.getScene().getWindow();
+        window.setScene(dashboardScene);
     }
 
     @FXML
-    void handlReportBtn(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("Report.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) reportBtn.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+    public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
+        Parent dashboardParent = loader.load();
+        CheckOutController checkOut = loader.getController();
+        checkOut.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navCheckoutButton.getScene().getWindow();
+        window.setScene(dashboardScene);
     }
+    @FXML
+    public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
+        Parent dashboardParent = loader.load();
+        QLNVController qlnvController = loader.getController();
+        qlnvController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navEmployeeButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+    @FXML
+    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Report.fxml"));
+        Parent dashboardParent = loader.load();
+        ReportController reportController = loader.getController();
+        reportController.setEmployeeID(employeeID);
+        Scene dashboardScene = new Scene(dashboardParent);
+        Stage window = (Stage) navReportButton.getScene().getWindow();
+        window.setScene(dashboardScene);
+    }
+
+
 
     @FXML
     void handleBtnBack(ActionEvent event) throws IOException {
@@ -120,7 +218,7 @@ public class EmployeeInfoController {
     @FXML
     void handleBtnSave(ActionEvent event) throws ParseException, SQLException {
         // retrieve the updated information from the text fields
-        String id = employeeID.getText();
+        String id = employeeIDD.getText();
         String updatedName = name.getText();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         java.sql.Date updatedDateOfBirth = new java.sql.Date(formatter.parse(dateOfBirth.getText()).getTime());
@@ -133,6 +231,15 @@ public class EmployeeInfoController {
         double updatedSalary = Double.parseDouble(salary.getText());
         java.sql.Date updatedBeginDate = new java.sql.Date(formatter.parse(beginDate.getText()).getTime());
         String updatedStatus = status.getText();
+
+        if (id.equals("") || id == null || updatedName.equals("") || updatedName == null || dateOfBirth.getText().equals("") || dateOfBirth.getText() == null || updatedGender.equals("") || updatedGender == null || updatedAddress.equals("") || updatedAddress == null || updatedPhone.equals("") || updatedPhone == null || updatedEmail.equals("") || updatedEmail == null || updatedCCCD.equals("") || updatedCCCD == null || updatedPosition.equals("") || updatedPosition == null || salary.getText().equals("") || salary.getText() == null || beginDate.getText().equals("") || beginDate.getText() == null || updatedStatus.equals("") || updatedStatus == null) {
+            // If any field is empty or null, show a warning
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Vui lòng nhập đầy đủ thông tin");
+            alert.showAndWait();
+            return;
+        }
 
         NhanVien updatedNhanVien = new NhanVien(id, updatedName, updatedDateOfBirth, updatedGender, updatedAddress, updatedPhone, updatedEmail, updatedCCCD, updatedPosition, updatedSalary, updatedBeginDate, updatedStatus);
 

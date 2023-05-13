@@ -14,10 +14,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import net.sf.jasperreports.engine.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -47,8 +49,6 @@ public class QLNVController {
     private Button btnDelEmployee;
     @FXML
     private Button LogoutButton;
-    @FXML
-    private Button reportBtn;
     @FXML
     private Button navCheckoutButton;
     @FXML
@@ -142,33 +142,6 @@ public class QLNVController {
         stmt.close();
         conn.close();
     }
-    public void handlePrintEmployeeList() throws JRException, SQLException, ClassNotFoundException {
-        // Establish a connection to the database
-        Connection connection = DriverManager.getConnection(connectUrl, username, password);
-
-        // Create a statement
-        Statement statement = connection.createStatement();
-
-        // Execute a query and get the result set
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
-
-        // Convert the result set to a JRDataSource
-        JRDataSource dataSource = new JRResultSetDataSource(resultSet);
-
-        // Compile the report
-        JasperReport jasperReport = JasperCompileManager.compileReport("C:/Users/TienDat/JaspersoftWorkspace/Employee/EmployeeReport.jrxml");
-
-        // Fill the report with data
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-
-        // Export the report to a .docx file
-        JasperExportManager.exportReportToHtmlFile(jasperPrint, "C:/Users/TienDat/JaspersoftWorkspace/Employee/EmployeeReport.html");
-
-        // Close the result set, statement, and connection
-        resultSet.close();
-        statement.close();
-        connection.close();
-    }
 
     @FXML
     void handleNhanVienClick(MouseEvent event) throws IOException {
@@ -240,16 +213,6 @@ public class QLNVController {
             // Remove the selected employee from the table view
             tblNhanVien.getItems().remove(selectedNhanVien);
         }
-    }
-    void handleCheckinButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckinController checkinController = loader.getController();
-        checkinController.setEmployeeID(employeeID);
-        System.out.println("employeeID in DashboardController: " + employeeID); // Add this line
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckinButton.getScene().getWindow();
-        window.setScene(dashboardScene);
     }
     @FXML
     public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
@@ -347,5 +310,45 @@ public class QLNVController {
             stage.setScene(scene);
             stage.show();
         }
+    }
+
+    public void handlePrintEmployeeList() throws JRException, SQLException, ClassNotFoundException {
+        // Establish a connection to the database
+        Connection connection = DriverManager.getConnection(connectUrl, username, password);
+
+        // Create a statement
+        Statement statement = connection.createStatement();
+
+        // Execute a query and get the result set
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
+
+        // Convert the result set to a JRDataSource
+        JRDataSource dataSource = new JRResultSetDataSource(resultSet);
+
+        // Compile the report
+        JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/Report/EmployeeReport.jrxml");
+
+        // Fill the report with data
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+        // Create a FileChooser dialog
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn nơi lưu trữ");
+
+        // Set the initial directory for the dialog
+        File initialDirectory = new File(System.getProperty("user.home"));
+        fileChooser.setInitialDirectory(initialDirectory);
+
+        // Show the dialog and get the chosen file path
+        File chosenFile = fileChooser.showSaveDialog(null);
+        String exportPath = chosenFile.getAbsolutePath();
+
+        // Export the report to the chosen file path
+        JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
+
+        // Close the result set, statement, and connection
+        resultSet.close();
+        statement.close();
+        connection.close();
     }
 }

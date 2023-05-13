@@ -10,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -23,6 +20,7 @@ import win.zqxu.jrviewer.JRViewerFX;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Optional;
 
 
@@ -53,6 +51,11 @@ public class ReportController {
     private ComboBox<String> reportType = new ComboBox<>();
     @FXML
     private Pane reportScene;
+    @FXML
+    private DatePicker reportTime1;
+    @FXML
+    private DatePicker reportTime2;
+
     private final String connectUrl = DataConnector.getDatabaseUrl();
     private final String username = DataConnector.getUsername();
     private final String password = DataConnector.getPassword();
@@ -60,6 +63,7 @@ public class ReportController {
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
+
     @FXML
     void initialize() {
         ObservableList<String> options = FXCollections.observableArrayList(
@@ -73,7 +77,6 @@ public class ReportController {
 
     @FXML
     void handleReportType() throws SQLException, JRException, IOException {
-        System.out.println("Report type selected: " + reportType.getValue());
         // Get the selected report type from the ComboBox
         String selectedReport = reportType.getValue();
         // Check if a report type is selected
@@ -87,11 +90,12 @@ public class ReportController {
             } else if (selectedReport.equals("Báo cáo checkout")) {
                 reportFile = "src/main/resources/Report/Check-out.jrxml";
             } else if (selectedReport.equals("Báo cáo doanh thu")) {
-                reportFile = "src/main/resources/Report/DoanhThu.jrxml";
+                reportFile = "src/main/resources/Report/Doanh-Thu.jrxml";
             } else {
                 // Handle invalid report type
                 return;
             }
+
             // Compile the report
             JasperReport jasperReport = JasperCompileManager.compileReport(reportFile);
 
@@ -99,15 +103,33 @@ public class ReportController {
             Connection connection = DriverManager.getConnection(connectUrl, username, password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = null;
+
+            LocalDate date1 = reportTime1.getValue();
+            LocalDate date2 = reportTime2.getValue();
+
             if (selectedReport.equals("Danh sách nhân viên")) {
                 resultSet = statement.executeQuery("SELECT * FROM employee");
             } else if (selectedReport.equals("Báo cáo checkin")) {
-                resultSet = statement.executeQuery("SELECT * FROM checkin_history JOIN employee ON checkin_history.Employee_ID = employee.Employee_ID JOIN guest ON checkin_history.Guest_ID = guest.Guest_ID");
+                String query = "SELECT * FROM checkin_history JOIN employee ON checkin_history.Employee_ID = employee.Employee_ID JOIN guest ON checkin_history.Guest_ID = guest.Guest_ID";
+                if (date1 != null && date2 != null) {
+                    query += " WHERE checkin_history.Checkin_Date BETWEEN '" + date1 + "' AND '" + date2 + "'";
+                }
+                resultSet = statement.executeQuery(query);
             } else if (selectedReport.equals("Báo cáo checkout")) {
-                resultSet = statement.executeQuery("SELECT * FROM hotelmanagement.checkout, guest, employee WHERE checkout.Guest_ID = guest.Guest_ID AND checkout.Employee_ID = employee.Employee_ID");
+                String query = "SELECT * FROM hotelmanagement.checkout, guest, employee WHERE checkout.Guest_ID = guest.Guest_ID AND checkout.Employee_ID = employee.Employee_ID";
+                if (date1 != null && date2 != null) {
+                    query += " AND checkout.Checkout_Date BETWEEN '" + date1 + "' AND '" + date2 + "'";
+                }
+                resultSet = statement.executeQuery(query);
             } else if (selectedReport.equals("Báo cáo doanh thu")) {
-                resultSet = statement.executeQuery("SELECT * FROM doanhthu");
+                String query = "SELECT * FROM doanhthu";
+                if (date1 != null && date2 != null) {
+                    query += " WHERE doanhthu.Bill_Date BETWEEN '" + date1 + "' AND '" + date2 + "'";
+                }
+                resultSet = statement.executeQuery(query);
             }
+
+
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, new JRResultSetDataSource(resultSet));
 
             // Create a SwingNode to hold the JRViewerFX
@@ -152,6 +174,11 @@ public class ReportController {
 
         // Execute a query and get the result set based on the selected report type
         ResultSet resultSet;
+
+        LocalDate date1 = reportTime1.getValue();
+        LocalDate date2 = reportTime2.getValue();
+
+
         if (selectedReport.equals("Danh sách nhân viên")) {
             resultSet = statement.executeQuery("SELECT * FROM employee");
 
@@ -180,8 +207,11 @@ public class ReportController {
             JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
 
         } else if (selectedReport.equals("Báo cáo checkin")) {
-            resultSet = statement.executeQuery("SELECT * FROM checkin_history JOIN employee ON checkin.Employee_ID = employee.Employee_ID JOIN guest ON checkin.Guest_ID = guest.Guest_ID");
-
+            String query = "SELECT * FROM checkin_history JOIN employee ON checkin_history.Employee_ID = employee.Employee_ID JOIN guest ON checkin_history.Guest_ID = guest.Guest_ID";
+            if (date1 != null && date2 != null) {
+                query += " WHERE checkin_history.Checkin_Date BETWEEN '" + date1 + "' AND '" + date2 + "'";
+            }
+            resultSet = statement.executeQuery(query);
             // Convert the result set to a JRDataSource
             JRDataSource dataSource = new JRResultSetDataSource(resultSet);
 
@@ -207,7 +237,11 @@ public class ReportController {
             JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
 
         } else if (selectedReport.equals("Báo cáo checkout")) {
-            resultSet = statement.executeQuery("SELECT * FROM hotelmanagement.checkout, guest, employee WHERE checkout.Guest_ID = guest.Guest_ID AND checkout.Employee_ID = employee.Employee_ID");
+            String query = "SELECT * FROM hotelmanagement.checkout, guest, employee WHERE checkout.Guest_ID = guest.Guest_ID AND checkout.Employee_ID = employee.Employee_ID";
+            if (date1 != null && date2 != null) {
+                query += " AND checkout.Checkout_Date BETWEEN '" + date1 + "' AND '" + date2 + "'";
+            }
+            resultSet = statement.executeQuery(query);
 
             // Convert the result set to a JRDataSource
             JRDataSource dataSource = new JRResultSetDataSource(resultSet);
@@ -234,8 +268,11 @@ public class ReportController {
             JasperExportManager.exportReportToHtmlFile(jasperPrint, exportPath);
 
         } else if (selectedReport.equals("Báo cáo doanh thu")) {
-            resultSet = statement.executeQuery("SELECT * FROM DoanhThu");
-
+            String query = "SELECT * FROM doanhthu";
+            if (date1 != null && date2 != null) {
+                query += " WHERE doanhthu.Bill_Date BETWEEN '" + date1 + "' AND '" + date2 + "'";
+            }
+            resultSet = statement.executeQuery(query);
             // Convert the result set to a JRDataSource
             JRDataSource dataSource = new JRResultSetDataSource(resultSet);
 

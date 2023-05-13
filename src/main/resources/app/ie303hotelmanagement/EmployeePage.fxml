@@ -29,13 +29,16 @@
                         <Insets />
                     </VBox.margin>
                 </ImageView>
-                <Button fx:id="navDashboardButton" mnemonicParsing="false" onAction="#handleNavDashboardButton" prefHeight="69.0" prefWidth="308.0" text="DASHBOARD">
+                <Button fx:id="navDashboardButton" mnemonicParsing="false" onAction="#handleNavDashboardButton" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;" text="DASHBOARD">
                     <VBox.margin>
                         <Insets left="15.0" right="15.0" top="15.0" />
                     </VBox.margin>
                     <font>
                         <Font name="Tahoma Bold" size="24.0" />
                     </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
                 </Button>
                 <Button fx:id="navCheckinButton" mnemonicParsing="false" onAction="#handleNavCheckinButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
                     <VBox.margin>
@@ -112,9 +115,9 @@
                         <Insets top="10.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="navEmployeeButton" mnemonicParsing="false" onAction="#handleNavEmployeeButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
+                <Button fx:id="navEmployeeButton" mnemonicParsing="false" onAction="#handleNavEmployeeButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 20 20 20 20;" text="NHÂN VIÊN">
                     <font>
-                        <Font name="Tahoma" size="24.0" />
+                        <Font name="Tahoma Bold" size="24.0" />
                     </font>
                     <padding>
                         <Insets bottom="15.0" top="15.0" />
@@ -123,7 +126,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                     <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets left="20.0" right="20.0" top="20.0" />
                     </VBox.margin>
                 </Button>
                 <Button fx:id="navReportButton" mnemonicParsing="false" onAction="#handleNavReportButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
@@ -168,52 +171,52 @@
         </VBox>
     </left>
     <center>
-        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <Line endX="1065.1998291015625" endY="-4.57763671875E-5" layoutX="466.0" layoutY="92.0" startX="-413.1999816894531" startY="-4.57763671875E-5" stroke="#1c2127" />
-                <Button fx:id="btnDelEmployee" layoutX="1359.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleBtnDelEmployee" prefHeight="38.0" prefWidth="174.0" text="Xóa nhân viên">
+                <Line endX="1065.1998291015625" endY="-4.57763671875E-5" layoutX="466.0" layoutY="92.0" startX="-413.1999816894531" startY="-4.57763671875E-5" stroke="#1c2127" AnchorPane.topAnchor="140.0" />
+                <Button fx:id="btnDelEmployee" layoutX="1359.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleBtnDelEmployee" prefHeight="38.0" prefWidth="174.0" text="Xóa nhân viên" AnchorPane.topAnchor="160.0">
                     <font>
                         <Font name="Tahoma" size="16.0" />
                     </font>
                 </Button>
                 <Pane layoutX="54.0" layoutY="176.0" prefHeight="859.0" prefWidth="1479.0">
                     <children>
-                        <TableView fx:id="tblNhanVien" onMouseClicked="#handleNhanVienClick" prefHeight="862.0" prefWidth="1479.0">
+                        <TableView fx:id="tblNhanVien" layoutY="59.0" onMouseClicked="#handleNhanVienClick" prefHeight="800.0" prefWidth="1479.0">
                             <columns>
                                 <TableColumn fx:id="colSTT" prefWidth="75.0" text="STT" />
                                 <TableColumn fx:id="colmaNhanVien" minWidth="0.0" prefWidth="251.19992065429688" text="MSNV" />
-                                <TableColumn fx:id="colTenNhanVien" prefWidth="588.8000183105469" text="HỌ TÊN" />
                                 <TableColumn fx:id="colSoDienThoai" prefWidth="288.800048828125" text="SỐ ĐIỆN THOẠI" />
                                 <TableColumn fx:id="colChucVu" prefWidth="273.5999755859375" text="CHỨC VỤ" />
+                                <TableColumn fx:id="colTenNhanVien" prefWidth="588.8000183105469" text="HỌ TÊN" />
                             </columns>
                         </TableView>
                     </children></Pane>
-                <Text layoutX="53.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ NHÂN VIÊN" wrappingWidth="364.5366897583008">
+                <Text layoutX="53.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NHÂN VIÊN" wrappingWidth="528.5366592407227" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
                     <font>
-                        <Font name="Tahoma" size="36.0" />
+                        <Font name="Bell MT Bold" size="48.0" />
                     </font>
                 </Text>
-                <Button fx:id="btnAddEmployee" layoutX="1167.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleBtnAddEmployee" prefHeight="38.0" prefWidth="174.0" text="Thêm nhân viên">
+                <Button fx:id="btnAddEmployee" layoutX="1167.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleBtnAddEmployee" prefHeight="38.0" prefWidth="174.0" text="Thêm nhân viên" AnchorPane.topAnchor="160.0">
                     <font>
                         <Font name="Tahoma" size="16.0" />
                     </font>
                 </Button>
-                <ImageView fitHeight="46.0" fitWidth="46.0" layoutX="54.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="46.0" fitWidth="46.0" layoutX="54.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="160.0">
                     <image>
                         <Image url="@search-interface-symbol.png" />
                     </image>
                 </ImageView>
-                <TextField fx:id="txtTimNV" layoutX="115.0" layoutY="110.0" prefHeight="49.0" prefWidth="361.0" promptText="Tìm nhân viên">
+                <TextField fx:id="txtTimNV" layoutX="115.0" layoutY="110.0" prefHeight="49.0" prefWidth="361.0" promptText="Tìm nhân viên" AnchorPane.topAnchor="160.0">
                     <font>
                         <Font size="20.0" />
                     </font>
                 </TextField>
-            <Button fx:id="employeeList" layoutX="973.0" layoutY="113.0" mnemonicParsing="false" onAction="#handlePrintEmployeeList" prefHeight="38.0" prefWidth="174.0" text="In danh sách">
+            <Button fx:id="employeeList" layoutX="973.0" layoutY="113.0" mnemonicParsing="false" onAction="#handlePrintEmployeeList" prefHeight="38.0" prefWidth="174.0" text="In danh sách" AnchorPane.topAnchor="160.0">
                <font>
                   <Font name="Tahoma" size="16.0" />
                </font>
             </Button>
             </children>
-        </Pane>
+        </AnchorPane>
     </center>
 </BorderPane>

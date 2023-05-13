@@ -28,15 +28,18 @@
                         <Insets />
                     </VBox.margin>
                 </ImageView>
-                <Button fx:id="helloButton" mnemonicParsing="false" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;">
+                <Button fx:id="navDashboardButton" mnemonicParsing="false" onAction="#handleNavDashboardButton" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;" text="DASHBOARD">
                     <VBox.margin>
                         <Insets left="15.0" right="15.0" top="15.0" />
                     </VBox.margin>
                     <font>
                         <Font name="Tahoma Bold" size="24.0" />
                     </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
                 </Button>
-                <Button fx:id="checkInButton" mnemonicParsing="false" onAction="#handleCheckInButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
+                <Button fx:id="navCheckinButton" mnemonicParsing="false" onAction="#handleNavCheckinButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
                     <VBox.margin>
                         <Insets top="20.0" />
                     </VBox.margin>
@@ -50,7 +53,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
+                <Button fx:id="navCheckoutButton" mnemonicParsing="false" onAction="#handleNavCheckoutButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
                     <font>
                         <Font name="Tahoma" size="24.0" />
                     </font>
@@ -64,7 +67,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
+                <Button fx:id="navServiceButton" mnemonicParsing="false" onAction="#handleNavServiceButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
                     <font>
                         <Font name="Tahoma" size="24.0" />
                     </font>
@@ -78,7 +81,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
+                <Button fx:id="navCustomerButton" mnemonicParsing="false" onAction="#handleNavCustomerButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
                     <font>
                         <Font name="Tahoma" size="24.0" />
                     </font>
@@ -97,7 +100,7 @@
                         <Insets bottom="5.0" left="25.0" top="15.0" />
                     </VBox.margin>
                 </Line>
-                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
+                <Button fx:id="navRoomButton" mnemonicParsing="false" onAction="#handleNavRoomButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
                     <font>
                         <Font name="Tahoma" size="24.0" />
                     </font>
@@ -111,9 +114,9 @@
                         <Insets top="10.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="employeeBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
+                <Button fx:id="navEmployeeButton" mnemonicParsing="false" onAction="#handleNavEmployeeButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 20 20 20 20;" text="NHÂN VIÊN">
                     <font>
-                        <Font name="Tahoma" size="24.0" />
+                        <Font name="Tahoma Bold" size="24.0" />
                     </font>
                     <padding>
                         <Insets bottom="15.0" top="15.0" />
@@ -122,10 +125,10 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                     <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets left="20.0" right="20.0" top="20.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="reportBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
+                <Button fx:id="navReportButton" mnemonicParsing="false" onAction="#handleNavReportButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
                     <font>
                         <Font name="Tahoma" size="24.0" />
                     </font>
@@ -169,9 +172,9 @@
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <VBox layoutX="898.0" layoutY="180.0" prefHeight="850.0" prefWidth="634.0" style="-fx-alignment: center; -fx-background-color: D9D9D9; -fx-background-radius: 10 10 10 10;">
+                <VBox layoutX="898.0" layoutY="180.0" prefHeight="865.0" prefWidth="634.0" style="-fx-alignment: center; -fx-background-color: BED4E9; -fx-background-radius: 10 10 10 10;" AnchorPane.bottomAnchor="20.0">
                     <children>
-                        <TextField fx:id="employeeID" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
+                        <TextField fx:id="employeeIDD" alignment="CENTER" editable="false" prefHeight="53.0" prefWidth="234.0" style="-fx-background-color: EEEEEF; -fx-background-radius: 20 20 20 20;">
                             <VBox.margin>
                                 <Insets bottom="10.0" left="30.0" right="30.0" top="30.0" />
                             </VBox.margin>
@@ -305,7 +308,7 @@
                         </TextField>
                     </children>
                 </VBox>
-                <VBox layoutX="576.0" layoutY="180.0" prefHeight="865.0" prefWidth="342.0" style="-fx-alignment: center; -fx-background-color: D9D9D9; -fx-background-radius: 10 10 10 10;" AnchorPane.topAnchor="180.0">
+                <VBox layoutX="576.0" layoutY="180.0" prefHeight="865.0" prefWidth="342.0" style="-fx-alignment: center; -fx-background-color: BED4E9; -fx-background-radius: 10 10 10 10;" AnchorPane.bottomAnchor="20.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MSNV:" wrappingWidth="250.0">
                             <font>
@@ -405,7 +408,7 @@
                         </Text>
                     </children>
                 </VBox>
-                <Pane layoutX="53.0" layoutY="180.0" prefHeight="866.0" prefWidth="478.0" style="-fx-background-color: BED4E9; -fx-background-radius: 20 20 20 20;" AnchorPane.topAnchor="180.0">
+                <Pane layoutX="53.0" layoutY="180.0" prefHeight="866.0" prefWidth="478.0" style="-fx-background-color: BED4E9; -fx-background-radius: 20 20 20 20;" AnchorPane.bottomAnchor="20.0">
                     <children>
                         <Line endX="317.20001220703125" layoutX="129.0" layoutY="415.0" startX="-100.0" />
                         <Label fx:id="lblName" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="451.0" prefHeight="30.0" prefWidth="422.0" textAlignment="CENTER">
@@ -415,26 +418,26 @@
                         </Label>
                         <ImageView fx:id="imgNhanVien" fitHeight="350.0" fitWidth="350.0" layoutX="63.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" />
                     </children></Pane>
-                <Text layoutX="60.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ NHÂN VIÊN" wrappingWidth="364.5366897583008">
+                <Text layoutX="60.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NHÂN VIÊN" wrappingWidth="540.5365982055664" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
                     <font>
-                        <Font name="Tahoma" size="36.0" />
+                        <Font name="Bell MT Bold" size="48.0" />
                     </font>
                 </Text>
-                <Line endX="1065.1998291015625" endY="-4.57763671875E-5" layoutX="466.0" layoutY="92.0" startX="-413.1999816894531" startY="-3.814697265625E-5" stroke="#1c2127" />
-                <Text layoutX="52.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="THÔNG TIN NHÂN VIÊN" textAlignment="CENTER" wrappingWidth="1478.9366760253906">
+                <Line endX="1065.1998291015625" endY="-4.57763671875E-5" layoutX="466.0" layoutY="92.0" startX="-413.1999816894531" startY="-3.814697265625E-5" stroke="#1c2127" AnchorPane.topAnchor="140.0" />
+                <Text layoutX="55.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="THÔNG TIN NHÂN VIÊN" textAlignment="CENTER" wrappingWidth="1478.9366760253906">
                     <font>
                         <Font name="Arial Bold" size="36.0" />
                     </font>
                 </Text>
-                <Button fx:id="btnBack" layoutX="7.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleBtnBack" prefHeight="45.0" prefWidth="45.0" style="-fx-background-radius: 20 20 20 20;" text="↩" textOverrun="CENTER_ELLIPSIS">
+                <Button fx:id="btnBack" layoutX="7.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleBtnBack" prefHeight="42.0" prefWidth="42.0" style="-fx-background-radius: 20 20 20 20;" text="↩" textOverrun="CENTER_ELLIPSIS" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="55.0">
                     <font>
                         <Font size="35.0" />
                     </font>
-                    <padding>
-                        <Insets bottom="-5.0" top="-5.0" />
-                    </padding>
+               <padding>
+                  <Insets bottom="-5.0" top="-5.0" />
+               </padding>
                 </Button>
-                <Button fx:id="btnSave" layoutX="1448.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleBtnSave" prefHeight="41.0" prefWidth="83.0" text="LƯU">
+                <Button fx:id="btnSave" layoutX="1450.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleBtnSave" prefHeight="38.0" prefWidth="83.0" text="LƯU">
                     <font>
                         <Font size="20.0" />
                     </font>
