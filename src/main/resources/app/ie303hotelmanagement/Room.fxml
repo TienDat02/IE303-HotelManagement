@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -100,9 +99,9 @@
                   <Insets bottom="5.0" left="25.0" top="15.0" />
                </VBox.margin>
             </Line>
-            <Button fx:id="navRoomButton" mnemonicParsing="false" onAction="#handleNavRoomButton" prefHeight="46.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
+            <Button fx:id="navRoomButton" mnemonicParsing="false" onAction="#handleNavRoomButton" prefHeight="46.0" prefWidth="330.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 20 20 20;" text="PHÒNG">
                <font>
-                  <Font name="Tahoma" size="24.0" />
+                  <Font name="Tahoma Bold" size="24.0" />
                </font>
                <padding>
                   <Insets bottom="15.0" top="15.0" />
@@ -111,7 +110,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
                <VBox.margin>
-                  <Insets top="10.0" />
+                  <Insets left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
             </Button>
             <Button fx:id="navEmployeeButton" mnemonicParsing="false" onAction="#handleNavEmployeeButton" prefHeight="50.0" prefWidth="330.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
@@ -174,12 +173,11 @@
          <content>
             <AnchorPane accessibleRole="TABLE_VIEW" prefHeight="1081.0" prefWidth="1587.0">
                <children>
-                  <Text layoutX="19.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ PHÒNG" wrappingWidth="238.7409553527832">
+                  <Text layoutX="19.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ PHÒNG" wrappingWidth="443.54106521606445" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
                      <font>
-                        <Font name="Times New Roman Bold" size="24.0" />
+                        <Font name="Bell MT Bold" size="48.0" />
                      </font>
                   </Text>
-                  <Separator layoutX="19.0" layoutY="60.0" prefHeight="3.0" prefWidth="1549.0" AnchorPane.rightAnchor="18.600000000000136" />
                   <TableView fx:id="roomTable" layoutX="770.0" layoutY="158.0" prefHeight="892.0" prefWidth="792.0">
                     <columns>
                       <TableColumn fx:id="roomIDColumn" prefWidth="75.0" text="PHÒNG" />

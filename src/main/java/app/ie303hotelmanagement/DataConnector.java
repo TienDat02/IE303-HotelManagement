@@ -3,7 +3,7 @@ package app.ie303hotelmanagement;
 public class DataConnector {
     private static String databaseUrl = "jdbc:mysql://localhost:3306/HotelManagement";
     private static String username = "root";
-    private static String password = "123456";
+    private static String password = "";
     public static String getDatabaseUrl() {
         return databaseUrl;
     }

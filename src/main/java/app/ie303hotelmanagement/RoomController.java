@@ -78,7 +78,11 @@ public class RoomController {
     @FXML
     private Button navReportButton;
 
-    public void initialize() {
+    public void initialize() throws SQLException {
+
+        /*
+
+        */
         // set up the columns in the table
         roomIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         roomTypeColumn.setCellValueFactory(new PropertyValueFactory<>("roomType"));
@@ -238,6 +242,28 @@ public class RoomController {
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
+
+    public  int checkIsAdmin(String employeeID) throws SQLException {
+        try {
+        // check if the user is admin
+        Connection check_admin_conn = DriverManager.getConnection(connectUrl,username , password);
+        PreparedStatement ps_admin = check_admin_conn.prepareStatement("SELECT * FROM account WHERE Employee_ID = ?");
+        ps_admin.setString(1, employeeID);
+        ResultSet rs_admin = ps_admin.executeQuery();
+        rs_admin.next();
+        System.out.println("rs_admin = " + rs_admin.getInt("isAdmin"));
+
+        if (rs_admin.getInt("isAdmin") == 1) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+    }
     @FXML
     public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
@@ -270,7 +296,13 @@ public class RoomController {
         window.setScene(dashboardScene);
     }
     @FXML
-    public void handleNavRoomButton(ActionEvent event) throws IOException{
+    public void handleNavRoomButton(ActionEvent event) throws IOException, SQLException {
+        if(checkIsAdmin(employeeID) == 0){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Bạn không có quyền truy cập!");
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
         Parent dashboardParent = loader.load();
         RoomController roomController = loader.getController();
