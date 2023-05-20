@@ -45,9 +45,9 @@ public class AlterServiceController {
                 serviceStatus.setText(rs.getString("Service_Status"));
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Service not found");
-                alert.setContentText("Could not find service with ID " + operateServiceID);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Không tìm thấy dịch vụ");
+                alert.setContentText("Không tìm thấy dịch vụ với ID " + operateServiceID);
                 alert.showAndWait();
             }
             conn.close();
@@ -70,18 +70,18 @@ public class AlterServiceController {
 
             // Display success alert
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText("Service updated");
-            alert.setContentText("Service with ID " + operateServiceID + " has been updated successfully.");
+            alert.setTitle("Thành công");
+            alert.setHeaderText("Cập nhật dịch vụ thành công");
+            alert.setContentText("Dịch vụ với ID " + operateServiceID + " đã được cập nhật thành công.");
             alert.showAndWait();
         } catch (SQLException e) {
             e.printStackTrace();
 
             // Display error alert
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Service update failed");
-            alert.setContentText("Failed to update service with ID " + operateServiceID + ".");
+            alert.setTitle("Lôi");
+            alert.setHeaderText("Cập nhật dịch vụ thất bại");
+            alert.setContentText("Thất bại trong việc cập nhật dịch vụ với ID " + operateServiceID + ".");
             alert.showAndWait();
         }
     }

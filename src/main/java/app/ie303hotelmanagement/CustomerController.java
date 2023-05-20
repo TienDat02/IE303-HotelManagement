@@ -170,7 +170,7 @@ public class CustomerController {
             // If there's an error with the database connection, show an alert to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Lỗi");
-            alert.setHeaderText("Database error");
+            alert.setHeaderText("Database connection error");
             alert.setContentText("Không thể kết nối đến cơ sở dữ liệu. Vui lòng kiểm tra lại.");
             alert.showAndWait();
             return;
@@ -200,9 +200,9 @@ public class CustomerController {
         } catch (SQLException e) {
             // If there's an error with the database connection, show an alert to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
+            alert.setTitle("Lỗi");
             alert.setHeaderText("Database error");
-            alert.setContentText("There was an error connecting to the database.");
+            alert.setContentText("Không thể thêm khách hàng vào cơ sở dữ liệu. Vui lòng kiểm tra lại.");
             alert.showAndWait();
         }
     }
@@ -217,9 +217,9 @@ public class CustomerController {
         // If no customer is selected, show an alert to the user and return
         if (selectedCustomer == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText("No customer selected");
-            alert.setContentText("Please select a customer to delete.");
+            alert.setTitle("Cảnh báo");
+            alert.setHeaderText("Không có khách hàng được chọn");
+            alert.setContentText("Hãy chọn khách hàng cần xóa.");
             alert.showAndWait();
             return;
         }
@@ -251,9 +251,9 @@ public class CustomerController {
         } catch (SQLException e) {
             // If there's an error with the database connection, show an alert to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
+            alert.setTitle("Lỗi");
             alert.setHeaderText("Database error");
-            alert.setContentText("There was an error connecting to the database.");
+            alert.setContentText("Không thể kết nối đến cơ sở dữ liệu. Vui lòng kiểm tra lại.");
             alert.showAndWait();
         }
     }
