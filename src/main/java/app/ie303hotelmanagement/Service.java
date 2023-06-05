@@ -47,4 +47,10 @@ public class Service {
     public void setServiceID(String serviceID) {
         this.serviceID = serviceID;
     }
+    public String getServiceStatus() {
+        return serviceStatus;
+    }
+    public void setServiceStatus(String serviceStatus) {
+        this.serviceStatus = serviceStatus;
+    }
 }

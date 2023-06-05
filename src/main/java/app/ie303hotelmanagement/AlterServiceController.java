@@ -1,18 +1,14 @@
 package app.ie303hotelmanagement;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.sql.*;
-import java.util.Optional;
 public class AlterServiceController {
+    // Khai báo các thành phần giao diện
     @FXML
     private TextField serviceStatus;
     @FXML

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="384.0" prefWidth="896.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.ie303hotelmanagement.ChangePolicyController">
+    <children>
+            <VBox layoutX="14.0" layoutY="12.0" prefHeight="358.0" prefWidth="882.0">
+                <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thành viên Kim Cương" wrappingWidth="270.13671875">
+                        <font>
+                            <Font name="Times New Roman Bold" size="22.0" />
+                        </font>
+                    </Text>
+                    <HBox prefHeight="43.0" prefWidth="882.0">
+                        <children>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ưu đãi thanh toán:" wrappingWidth="143.765625">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="diamondPercent" prefHeight="25.0" prefWidth="35.0" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Separator orientation="VERTICAL" prefHeight="200.0" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Điều kiện: ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giá trị ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="diamondNumber" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" lần Check-out gần nhất: ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="diamondValue" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" vnđ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                        </children>
+                        <VBox.margin>
+                            <Insets top="10.0" />
+                        </VBox.margin>
+                    </HBox>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thành viên Vàng" wrappingWidth="276.13671875">
+                        <font>
+                            <Font name="Times New Roman Bold" size="22.0" />
+                        </font>
+                    </Text>
+                    <HBox prefHeight="43.0" prefWidth="882.0">
+                        <children>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ưu đãi thanh toán:" wrappingWidth="143.765625">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="goldPercent" prefHeight="25.0" prefWidth="35.0" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Separator orientation="VERTICAL" prefHeight="200.0" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Điều kiện: ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giá trị ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="goldNumber" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" lần Check-out gần nhất: ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="goldValue" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" vnđ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                        </children>
+                        <VBox.margin>
+                            <Insets top="10.0" />
+                        </VBox.margin>
+                    </HBox>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thành viên Bạc" wrappingWidth="208.13671875">
+                        <font>
+                            <Font name="Times New Roman Bold" size="22.0" />
+                        </font>
+                    </Text>
+                    <HBox prefHeight="43.0" prefWidth="882.0">
+                        <children>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ưu đãi thanh toán:" wrappingWidth="143.765625">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="silverPercent" prefHeight="25.0" prefWidth="35.0" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Separator orientation="VERTICAL" prefHeight="200.0" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Điều kiện: ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giá trị ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="silverNumber" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" lần Check-out gần nhất: ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                            <TextField fx:id="silverValue" />
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" vnđ">
+                                <font>
+                                    <Font size="17.0" />
+                                </font>
+                            </Text>
+                        </children>
+                        <VBox.margin>
+                            <Insets top="10.0" />
+                        </VBox.margin>
+                    </HBox>
+                    <Button mnemonicParsing="false" onAction="#handleChangePolicy" prefHeight="54.0" prefWidth="139.0" text="Lưu">
+                        <font>
+                            <Font size="25.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets left="350.0" top="50.0" />
+                        </VBox.margin>
+                    </Button>
+                </children>
+            </VBox>
+
+    </children>
+</AnchorPane>

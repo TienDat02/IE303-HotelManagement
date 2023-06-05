@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Checkin extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HotelManagement.class.getResource("Checkin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HotelManagement.class.getResource("checkout.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();

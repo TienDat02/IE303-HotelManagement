@@ -1,18 +1,17 @@
 package app.ie303hotelmanagement;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
-import java.io.IOException;
-import java.sql.*;
-import java.util.Optional;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 public class AddServiceController {
+    // Khai báo các thành phần giao diện
     @FXML
     private Button buttonCancel;
     @FXML
@@ -25,9 +24,11 @@ public class AddServiceController {
     private TextField inputServicePrice;
     @FXML
     private TextField inputServiceDescription;
+    // kết nối database
     private String databaseUrl = DataConnector.getDatabaseUrl();
     private String databaseUsername = DataConnector.getUsername();
     private String databasePassword = DataConnector.getPassword();
+    // Hàm xử lý sự kiện khi nhấn nút Add Service
     public void handleButtonAddService(ActionEvent event) throws SQLException {
         String serviceName = inputServiceName.getText();
         float servicePrice = Float.parseFloat(inputServicePrice.getText());

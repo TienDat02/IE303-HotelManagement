@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane fx:id="GraphsPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.ie303hotelmanagement.GraphsPaneController">
+          <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="2456.0" prefWidth="1578.0">
+                  <children>
+                      <VBox layoutX="21.0" layoutY="20.0" prefHeight="2330.0" prefWidth="1550.0">
+                          <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BIỂU ĐỒ">
+                                  <font>
+                                      <Font name="Times New Roman Bold" size="40.0" />
+                                  </font>
+                              </Text>
+                              <HBox layoutX="20.0" layoutY="105.0" prefHeight="83.0" prefWidth="1550.0" style="-fx-background-color: #1C2127;">
+                                  <children>
+                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Từ" textAlignment="CENTER">
+                                          <font>
+                                              <Font name="Arial" size="30.0" />
+                                          </font>
+                                          <HBox.margin>
+                                              <Insets left="15.0" top="15.0" />
+                                          </HBox.margin>
+                                      </Text>
+                                      <Spinner fx:id="hour1" prefHeight="35.0" prefWidth="70.0">
+                                          <HBox.margin>
+                                              <Insets left="30.0" top="15.0" />
+                                          </HBox.margin>
+                                      </Spinner>
+                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                                          <HBox.margin>
+                                              <Insets left="10.0" top="13.0" />
+                                          </HBox.margin>
+                                          <font>
+                                              <Font name="Arial" size="30.0" />
+                                          </font>
+                                      </Text>
+                                      <Spinner fx:id="minute1" prefHeight="35.0" prefWidth="70.0">
+                                          <HBox.margin>
+                                              <Insets left="5.0" top="15.0" />
+                                          </HBox.margin>
+                                      </Spinner>
+                                      <DatePicker fx:id="date1" prefHeight="35.0" prefWidth="174.0">
+                                          <HBox.margin>
+                                              <Insets left="30.0" top="15.0" />
+                                          </HBox.margin>
+                                      </DatePicker>
+                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Đến" textAlignment="CENTER">
+                                          <font>
+                                              <Font name="Arial" size="30.0" />
+                                          </font>
+                                          <HBox.margin>
+                                              <Insets left="30.0" top="15.0" />
+                                          </HBox.margin>
+                                      </Text>
+                                      <Spinner fx:id="hour2" prefHeight="35.0" prefWidth="70.0">
+                                          <HBox.margin>
+                                              <Insets left="30.0" top="15.0" />
+                                          </HBox.margin>
+                                      </Spinner>
+                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                                          <font>
+                                              <Font name="Arial" size="30.0" />
+                                          </font>
+                                          <HBox.margin>
+                                              <Insets left="10.0" top="13.0" />
+                                          </HBox.margin>
+                                      </Text>
+                                      <Spinner fx:id="minute2" prefHeight="35.0" prefWidth="70.0">
+                                          <HBox.margin>
+                                              <Insets left="5.0" top="15.0" />
+                                          </HBox.margin>
+                                      </Spinner>
+                                      <DatePicker fx:id="date2" prefHeight="35.0" prefWidth="174.0">
+                                          <HBox.margin>
+                                              <Insets left="30.0" top="15.0" />
+                                          </HBox.margin>
+                                      </DatePicker>
+                        <VBox prefHeight="83.0" prefWidth="496.0">
+                           <children>
+                              <ComboBox fx:id="filterCombobox" prefHeight="31.0" prefWidth="473.0" promptText="Theo tháng" style="-fx-font-size: 15;">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                                          <HBox prefHeight="25.0" prefWidth="358.0">
+                                              <children>
+                                                  <RadioButton fx:id="barChartRadioButton" mnemonicParsing="false" prefHeight="21.0" prefWidth="227.0" selected="true" text="Doanh thu theo hóa đơn" textFill="WHITE">
+                                                      <toggleGroup>
+                                                          <ToggleGroup fx:id="graph" />
+                                                      </toggleGroup>
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                                  </RadioButton>
+                                                  <RadioButton fx:id="stackedBarChartRadioButton" mnemonicParsing="false" text="Doanh thu theo phòng và dịch vụ" textFill="WHITE" toggleGroup="$graph">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </RadioButton>
+                                              </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                          </HBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#handleDrawGraph" text="CHECK">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="15.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets top="15.0" />
+                                  </VBox.margin>
+                              </HBox>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="DOANH THU">
+                                  <font>
+                                      <Font name="Times New Roman Bold" size="40.0" />
+                                  </font>
+                              </Text>
+                                <AnchorPane fx:id="incomeGraphPane" prefHeight="720.0" prefWidth="1550.0" style="-fx-border-color: black;" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="DỊCH VỤ">
+                     <font>
+                        <Font name="Times New Roman Bold" size="40.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </Text>
+                  <AnchorPane fx:id="mostUsedService" prefHeight="720.0" prefWidth="1550.0" style="-fx-border-color: black;">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PHÒNG">
+                     <font>
+                        <Font name="Times New Roman Bold" size="40.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </Text>
+                  <AnchorPane fx:id="mostUsedRoomType" prefHeight="720.0" prefWidth="1550.0" style="-fx-border-color: black;" />
+
+                                            </children>
+                      </VBox>
+                  </children>
+              </AnchorPane>
+          </content>
+      </ScrollPane>

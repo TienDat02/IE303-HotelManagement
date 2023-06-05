@@ -2,17 +2,11 @@ package app.ie303hotelmanagement;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,9 +15,13 @@ public class RoomController {
     private String connectUrl = DataConnector.getDatabaseUrl();
     private String username = DataConnector.getUsername();
     private String password = DataConnector.getPassword();
-    @FXML
-    private Button LogoutButton;
 
+    @FXML
+    private Button addRoomButton;
+    @FXML
+    private Button updateRoomButton;
+    @FXML
+    private Button deleteRoomButton;
     @FXML
     private TableView<RoomDetail> roomTable;
 
@@ -41,6 +39,10 @@ public class RoomController {
 
     @FXML
     private TableColumn<RoomDetail, String> roomStatusColumn;
+    @FXML
+    private ComboBox<String> globalRoomStatus = new ComboBox<>();
+    @FXML
+    private TextField globalRoomPrice;
 
     @FXML
     private TextField searchBox;
@@ -56,34 +58,20 @@ public class RoomController {
 
     @FXML
     private TextField roomPrice;
+    @FXML
+    private CheckBox priceCheckBox;
+    @FXML
+    private CheckBox statusCheckBox;
 
     @FXML
     private ChoiceBox<String> roomStatus;
+    @FXML
+    private ComboBox<String> globalRoomType = new ComboBox<>();
     private ObservableList<RoomDetail> roomList;
-    private String employeeID;
-    @FXML
-    private Button navServiceButton;
-    @FXML
-    private Button navRoomButton;
-    @FXML
-    private Button navDashboardButton;
-    @FXML
-    private Button navCheckinButton;
-    @FXML
-    private Button navEmployeeButton;
-    @FXML
-    private Button navCheckoutButton;
-    @FXML
-    private Button navCustomerButton;
-    @FXML
-    private Button navReportButton;
+    private String employeeID  = EmployeeSingleton.getInstance().getEmployeeID();
+
 
     public void initialize() throws SQLException {
-
-        /*
-
-        */
-        // set up the columns in the table
         roomIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomID"));
         roomTypeColumn.setCellValueFactory(new PropertyValueFactory<>("roomType"));
         roomFloorColumn.setCellValueFactory(new PropertyValueFactory<>("roomFloor"));
@@ -102,6 +90,20 @@ public class RoomController {
                 roomDisplay.add(new RoomDetail(rs.getString("Room_ID"), rs.getString("Room_Type"), rs.getInt("Room_Floor"), rs.getFloat("Room_Price"), rs.getString("Room_Status")));
                 i++;
             }
+            rs.close();
+            PreparedStatement ps2 = conn.prepareStatement("SELECT DISTINCT Room_Type FROM room");
+            ResultSet rs2 = ps2.executeQuery();
+            while (rs2.next()) {
+                globalRoomType.getItems().add(rs2.getString("Room_Type"));
+            }
+            rs2.close();
+            PreparedStatement ps3 = conn.prepareStatement("SELECT DISTINCT Room_Status FROM room");
+            ResultSet rs3 = ps3.executeQuery();
+            while (rs3.next()) {
+                globalRoomStatus.getItems().add(rs3.getString("Room_Status"));
+            }
+            globalRoomStatus.getItems().add("Đang sửa chữa");
+            rs3.close();
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,6 +119,29 @@ public class RoomController {
         // set up the choice box
         ObservableList<String> statusOptions = FXCollections.observableArrayList("Trống", "Đang sửa chữa");
         roomStatus.setItems(statusOptions);
+
+        roomTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                roomId.setText(newSelection.getRoomID());
+                roomType.setText(newSelection.getRoomType());
+                roomFloor.setText(Integer.toString(newSelection.getRoomFloor()));
+                roomPrice.setText(Float.toString(newSelection.getRoomPrice()));
+                roomStatus.setValue(newSelection.getRoomStatus());
+            }
+        });
+        roomTable.setRowFactory(tv -> new TableRow<RoomDetail>() {
+            @Override
+            protected void updateItem(RoomDetail item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle("");
+                } else if (item.getRoomStatus().equals("Đang sửa chữa")) {
+                    setStyle("-fx-background-color: red;");
+                } else {
+                    setStyle("");
+                }
+            }
+        });
     }
     public void handleAddRoomButton(MouseEvent event) {
         try {
@@ -264,108 +289,60 @@ public class RoomController {
     }
     return 0;
     }
-    @FXML
-    public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
-        Parent dashboardParent = loader.load();
-        DashboardController dashboardController = loader.getController();
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navDashboardButton.getScene().getWindow();
-        dashboardController.initialize(employeeID);
-        window.setScene(dashboardScene);
-    }
-    //Navitation
-    @FXML
-    public void handleNavCustomerButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Customer.fxml"));
-        Parent dashboardParent = loader.load();
-        CustomerController customerController = loader.getController();
-        customerController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCustomerButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavServiceButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Service.fxml"));
-        Parent dashboardParent = loader.load();
-        ServiceController serviceController = loader.getController();
-        serviceController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navServiceButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavRoomButton(ActionEvent event) throws IOException, SQLException {
-        if(checkIsAdmin(employeeID) == 0){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Bạn không có quyền truy cập!");
-            alert.setHeaderText(null);
-            alert.showAndWait();
-            return;
-        }
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
-        Parent dashboardParent = loader.load();
-        RoomController roomController = loader.getController();
-        roomController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navRoomButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
 
-    @FXML// đây là hàm để chuyển qua trang Checkin
-    public void handleNavCheckinButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckinController checkinController = loader.getController();
-        checkinController.setEmployeeID(employeeID);
-        System.out.println("employeeID in DashboardController: " + employeeID); // Add this line
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckinButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
+    public void handleUpdateGlobally() {
+        String acc_pass = null;
+        try {
+            Connection conn = DriverManager.getConnection(connectUrl, username, password);
+            if (!globalRoomType.getValue().toString().isEmpty()) {
+                if (priceCheckBox.isSelected() && !globalRoomPrice.getText().isEmpty()) {
+                    PreparedStatement ps = conn.prepareStatement("UPDATE room SET Room_Price = ? WHERE Room_Type = ?");
+                    ps.setFloat(1, Float.parseFloat(globalRoomPrice.getText()));
+                    ps.setString(2, globalRoomType.getValue().toString());
+                    ps.executeUpdate();
+                    conn.close();
+                    refreshTable();
+                }
+                if (statusCheckBox.isSelected() && globalRoomStatus.getValue() != null) {
+                    PreparedStatement getPassword = conn.prepareStatement("SELECT * FROM account WHERE Employee_ID = ?");
+                    getPassword.setString(1, employeeID);
+                    ResultSet getPasswordRS = getPassword.executeQuery();
+                    if (getPasswordRS.next()){
+                        acc_pass = getPasswordRS.getString("account_password");
+                    }
+                    getPasswordRS.close();
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Xác nhận cập nhật");
+                    dialog.setHeaderText("Đây là thao tác nguy hiểm. Vui lòng nhập mật khẩu để xác nhận.");
+                    dialog.setContentText("Mật khẩu:");
 
-    @FXML
-    public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckOutController checkOut = loader.getController();
-        checkOut.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckoutButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
-        Parent dashboardParent = loader.load();
-        QLNVController qlnvController = loader.getController();
-        qlnvController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navEmployeeButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Report.fxml"));
-        Parent dashboardParent = loader.load();
-        ReportController reportController = loader.getController();
-        reportController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navReportButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML// đây là hàm để đăng xuất
-    void handleLogoutButton(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có muốn đăng xuất?");
-        alert.setHeaderText(null);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Parent root = FXMLLoader.load(getClass().getResource("Login-Page.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) LogoutButton.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent() && result.get().equals(acc_pass)) {
+                        PreparedStatement ps = conn.prepareStatement("UPDATE room SET Room_Status = ? WHERE Room_Type = ?");
+                        ps.setString(1, globalRoomStatus.getValue().toString());
+                        ps.setString(2, globalRoomType.getValue().toString());
+                        ps.executeUpdate();
+                        conn.close();
+                        refreshTable();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Incorrect password. Update cancelled.");
+                        alert.setHeaderText(null);
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Vui lòng điền loại phòng!");
+                alert.setHeaderText(null);
+                alert.showAndWait();
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+
+
 }
 

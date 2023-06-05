@@ -1,8 +1,8 @@
 package app.ie303hotelmanagement;
 
+import effects.ButtonAnimation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,8 +15,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CheckOutController {
@@ -24,50 +27,24 @@ public class CheckOutController {
     private String username = DataConnector.getUsername();
     private String password = DataConnector.getPassword();
 
-    @FXML
-    private Button LogoutButton;
-
+    @FXML private Button checkoutButton;
     @FXML
     private TableView<RoomDisplay> waitCheckOut;
-
     @FXML
     private TableColumn<RoomDisplay, Integer> ordinalNumberColumn;
-
     @FXML
     private TableColumn<RoomDisplay, String> roomIDColumn;
-
     @FXML
     private TableColumn<RoomDisplay, String> roomTypeColumn;
-
     @FXML
     private TableColumn<RoomDisplay, Integer> roomFloorColumn;
-
     @FXML
     private TableColumn<RoomDisplay, String> roomStatusColumn;
     @FXML
-    private Button navCheckinButton;
-    @FXML
-    private Button navCheckoutButton;
-    @FXML
-    private Button navRoomButton;
-    @FXML
-    private Button navEmployeeButton;
-    @FXML
-    private Button navCustomerButton;
-    @FXML
-    private Button navServiceButton;
-
-    @FXML
     private TextField searchBox;
-    @FXML
-    private Button navDashboardButton;
-    @FXML
-    private Button navReportButton;
-    private String employeeID;
-
+    private String employeeID  = EmployeeSingleton.getInstance().getEmployeeID();
 
     private ObservableList<RoomDisplay> roomList;
-
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
@@ -83,10 +60,11 @@ public class CheckOutController {
         // load data from database
         ArrayList<RoomDisplay> roomDisplay = new ArrayList<>();
         try {
+            LocalDateTime now = LocalDateTime.now();
             Connection conn = DriverManager.getConnection(connectUrl, username, password);
-
             // Update status of room from "Đang thuê" to "Chờ trả" if the check-out date is today
-            PreparedStatement psUpdateRoomStatus = conn.prepareStatement("UPDATE room SET Room_Status = 'Chờ trả' WHERE Room_Status = 'Đang thuê' and Room_ID IN (SELECT Room_ID FROM checkin WHERE curdate() >= Expected_Checkout_Date)");
+            PreparedStatement psUpdateRoomStatus = conn.prepareStatement("UPDATE room SET Room_Status = 'Chờ trả' WHERE Room_Status = 'Đang thuê' and Room_ID IN (SELECT Room_ID FROM checkin WHERE Expected_Checkout_Date <= ?)");
+            psUpdateRoomStatus.setString(1, now.toString());
             psUpdateRoomStatus.executeUpdate();
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM room WHERE Room_Status = 'Chở trả' OR Room_Status = 'Đang thuê'");
             ResultSet rs = ps.executeQuery();
@@ -99,13 +77,59 @@ public class CheckOutController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        ButtonAnimation.addHoverEffect(checkoutButton);
         // convert the arraylist to observablelist
         roomList = FXCollections.observableArrayList(roomDisplay);
 
 
         // load data into the table
+        // create a map to store the expected checkout dates for each room
+        Map<String, LocalDateTime> expectedCheckoutDates = new HashMap<>();
+
+// query the expected checkout dates for all rooms
+        try (Connection conn = DriverManager.getConnection(DataConnector.getDatabaseUrl(), DataConnector.getUsername(), DataConnector.getPassword());
+             PreparedStatement updateRoomStatus = conn.prepareStatement("SELECT Room_ID, Expected_Checkout_Date FROM Checkin WHERE Room_ID IN (SELECT Room_ID FROM room WHERE Room_Status = 'Chờ trả' OR Room_Status = 'Đang thuê')")) {
+            ResultSet rs = updateRoomStatus.executeQuery();
+            while (rs.next()) {
+                String roomID = rs.getString("Room_ID");
+                LocalDateTime expectedCheckoutDate = rs.getTimestamp("Expected_Checkout_Date").toLocalDateTime();
+                expectedCheckoutDates.put(roomID, expectedCheckoutDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         waitCheckOut.setItems(roomList);
+        waitCheckOut.setRowFactory(tv -> new TableRow<RoomDisplay>() {
+            @Override
+            protected void updateItem(RoomDisplay item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle("-fx-background-color: transparent;");
+                } else if (item.getRoomStatus().equals("Chờ trả")) {
+                    LocalDateTime expectedCheckoutDate = expectedCheckoutDates.get(item.getRoomID());
+                    if (expectedCheckoutDate != null) {
+                        Duration duration = Duration.between(expectedCheckoutDate, LocalDateTime.now());
+                        long hours = duration.toHours();
+                        if (hours <= 1) {
+                            item.setRoomStatus("Sắp trả");
+                            setStyle("");
+                        } else if (hours > 1) {
+                            item.setRoomStatus("Quá hạn + " + hours + " giờ");
+                            setStyle("-fx-background-color: #ff0000;");
+                        }
+                    }
+                } else if (item.getRoomStatus().startsWith("Quá hạn")) {
+                    setStyle("-fx-background-color: #ff0000;");
+                } else if (item.getRoomStatus().equals("Sắp trả")){
+                    setStyle("-fx-background-color: yellow;");
+                } else if (item.getRoomStatus().equals("Đang thuê")){
+                    setStyle("-fx-background-color: green;");
+                } else {
+                    setStyle("");
+                }
+            }
+        });
     }
 
 
@@ -113,12 +137,12 @@ public class CheckOutController {
     public void handleSearchBox(KeyEvent event) {
         String search = searchBox.getText();
         ObservableList<RoomDisplay> filteredList = FXCollections.observableArrayList();
+        filteredList.clear();
         for (RoomDisplay room : roomList) {
             if (room.getRoomID().contains(search)) {
                 filteredList.add(room);
             }
         }
-
         waitCheckOut.setItems(filteredList);
     }
 
@@ -141,7 +165,7 @@ public class CheckOutController {
             ArrayList<Customer> customerDisplay = new ArrayList<>();
             int customerOrdinary = 1;
             while (rsCustomer.next()) {
-                customerDisplay.add(new Customer(customerOrdinary, rsCustomer.getString("Guest_ID"), rsCustomer.getString("Guest_Name"), rsCustomer.getInt("Guest_BirthYear"), rsCustomer.getString("Guest_Phone"), rsCustomer.getString("Guest_Notes")));
+                customerDisplay.add(new Customer(customerOrdinary, rsCustomer.getString("Guest_ID"), rsCustomer.getString("Guest_Name"), rsCustomer.getInt("Number_Of_Checkin"), rsCustomer.getString("Guest_Tier"), rsCustomer.getInt("Guest_BirthYear"), rsCustomer.getString("Guest_Phone"), rsCustomer.getString("Guest_Notes")));
                 customerOrdinary++;
             }
 
@@ -162,7 +186,7 @@ public class CheckOutController {
 
 
             // Load the next scene
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("draft.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CheckoutDetails.fxml"));
             Parent root = loader.load();
 
             //edited here
@@ -208,103 +232,6 @@ public class CheckOutController {
         // convert the arraylist to observablelist
         roomList = FXCollections.observableArrayList(roomDisplay);
         waitCheckOut.setItems(roomList);
-    }
-
-    @FXML
-    public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
-        Parent dashboardParent = loader.load();
-        DashboardController dashboardController = loader.getController();
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navDashboardButton.getScene().getWindow();
-        dashboardController.initialize(employeeID);
-        window.setScene(dashboardScene);
-    }
-    //Navitation
-    @FXML
-    public void handleNavCustomerButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Customer.fxml"));
-        Parent dashboardParent = loader.load();
-        CustomerController customerController = loader.getController();
-        customerController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCustomerButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavServiceButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Service.fxml"));
-        Parent dashboardParent = loader.load();
-        ServiceController serviceController = loader.getController();
-        serviceController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navServiceButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavRoomButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
-        Parent dashboardParent = loader.load();
-        RoomController roomController = loader.getController();
-        roomController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navRoomButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
-    @FXML// đây là hàm để chuyển qua trang Checkin
-    public void handleNavCheckinButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckinController checkinController = loader.getController();
-        checkinController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckinButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
-    @FXML
-    public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckOutController checkOut = loader.getController();
-        checkOut.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckoutButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
-        Parent dashboardParent = loader.load();
-        QLNVController qlnvController = loader.getController();
-        qlnvController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navEmployeeButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Report.fxml"));
-        Parent dashboardParent = loader.load();
-        ReportController reportController = loader.getController();
-        reportController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navReportButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML// đây là hàm để đăng xuất
-    void handleLogoutButton(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có muốn đăng xuất?");
-        alert.setHeaderText(null);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Parent root = FXMLLoader.load(getClass().getResource("Login-Page.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) LogoutButton.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        }
     }
 }
 

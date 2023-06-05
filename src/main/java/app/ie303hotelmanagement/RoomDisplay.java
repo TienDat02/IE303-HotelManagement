@@ -1,15 +1,15 @@
 package app.ie303hotelmanagement;
 
+import java.sql.SQLException;
+
 public class RoomDisplay {
-
-
     private int ordinalNumber;
     private String roomID;
     private String roomType;
     private int roomFloor;
     private String roomStatus;
 
-    public RoomDisplay(int ordinalNumber, String roomID, String roomType, int roomFloor, String roomStatus) {
+    public RoomDisplay(int ordinalNumber, String roomID, String roomType, int roomFloor, String roomStatus) throws SQLException {
         this.ordinalNumber = ordinalNumber;
         this.roomID = roomID;
         this.roomType = roomType;

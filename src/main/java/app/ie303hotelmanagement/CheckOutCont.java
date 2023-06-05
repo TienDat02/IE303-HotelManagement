@@ -194,7 +194,7 @@ public class CheckOutCont {
 
     @FXML
     public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard2.fxml"));
         Parent dashboardParent = loader.load();
         DashboardController dashboardController = loader.getController();
         Scene dashboardScene = new Scene(dashboardParent);
@@ -247,7 +247,7 @@ public class CheckOutCont {
 
     @FXML
     public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkout.fxml"));
         Parent dashboardParent = loader.load();
         CheckOutController checkOut = loader.getController();
         checkOut.setEmployeeID(employeeID);
@@ -259,7 +259,7 @@ public class CheckOutCont {
     public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
         Parent dashboardParent = loader.load();
-        QLNVController qlnvController = loader.getController();
+        EmployeeController qlnvController = loader.getController();
         qlnvController.setEmployeeID(employeeID);
         Scene dashboardScene = new Scene(dashboardParent);
         Stage window = (Stage) navEmployeeButton.getScene().getWindow();

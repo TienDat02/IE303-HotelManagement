@@ -1,5 +1,13 @@
 package app.ie303hotelmanagement;
 
+
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeWriter;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -8,10 +16,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,20 +35,25 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 public class CheckoutDetails {
 
-    @FXML
-    AnchorPane checkoutPane;
+    @FXML private VBox checkoutPane;
     private String connectUrl = DataConnector.getDatabaseUrl();
     private String username = DataConnector.getUsername();
     private String password = DataConnector.getPassword();
@@ -66,7 +84,7 @@ public class CheckoutDetails {
     private Text employeeName;
     @FXML
     private Text employeeID1;
-    private String employeeID;
+    private String employeeID  = EmployeeSingleton.getInstance().getEmployeeID();
     private String customerID;
     @FXML private Button billButton;
 
@@ -82,6 +100,7 @@ public class CheckoutDetails {
     @FXML private TableColumn<CheckoutDetails, Time> checkoutTimeColumn;
     @FXML private TableColumn<CheckoutRoomDetails, Float> hoursColumn;
     @FXML private TableColumn<CheckoutRoomDetails, Float> roomTotalColumn;
+    @FXML private TableColumn<CheckoutRoomDetails, Integer> overCheckoutColumn;
     @FXML private Text roomsTotal;
 
     @FXML private javafx.scene.control.TableView<CheckoutServiceDetails> serviceTable;
@@ -96,11 +115,20 @@ public class CheckoutDetails {
     @FXML private Text servicesTotal;
     @FXML private Button checkoutButton;
     @FXML private Button deleteRoomButton;
-    @FXML private DatePicker nowDate;
-    @FXML private TextField nowTime;
+    @FXML private Text nowDate;
+    @FXML private Text nowTime;
 
+    @FXML private Button checkDiscountButton;
+    @FXML private Button qrScanButton;
+    @FXML private TextField discountInput;
+    @FXML private Text discountText;
+    @FXML private ImageView qrCode;
 
+    @FXML private Text tierDiscount;
+    @FXML private Text couponDiscount;
 
+    private int tierDiscountValue = 0;
+    private int couponDiscountValue = 0;
 
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
@@ -110,14 +138,30 @@ public class CheckoutDetails {
     public void setCustomer(String customerID) {
         this.customerID = customerID;
     }
+    public class QRCodeGenerator {
+        public static void generateQRCode(String data, String filePath) throws WriterException {
+            try {
+                int width = 300;
+                int height = 300;
+                String format = "png";
+                Map<EncodeHintType, Object> hints = new HashMap<>();
+                hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+                BitMatrix bitMatrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, width, height, hints);
+                Path path = Paths.get(filePath);
+                MatrixToImageWriter.writeToPath(bitMatrix, format, path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void setData() {
-        nowDate.setValue(LocalDate.now());
+        nowDate.setText(LocalDate.now().toString());
         nowTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         initialRoomTable();
         try {
             Connection conn = DriverManager.getConnection(connectUrl, username, password);
-            PreparedStatement stmt = conn.prepareStatement("SELECT Guest_Name, Guest_Phone, Guest_Notes FROM guest WHERE Guest_ID = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM guest WHERE Guest_ID = ?");
             stmt.setString(1, customerID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -125,6 +169,15 @@ public class CheckoutDetails {
                 guestName.setText(rs.getString("Guest_Name"));
                 guestPhone.setText(rs.getString("Guest_Phone"));
                 guestNote.setText(rs.getString("Guest_Notes"));
+                if(rs.getString("Guest_Tier").equals("Bạc")) {
+                    tierDiscountValue = 5;
+                } else if (rs.getString("Guest_Tier").equals("Vàng")) {
+                    tierDiscountValue = 10;
+                } else if (rs.getString("Guest_Tier").equals("Kim cương")) {
+                    tierDiscountValue = 15;
+                }
+                String displayText = rs.getString("Guest_Tier") + " - " + String.valueOf(tierDiscountValue) + "%";
+                tierDiscount.setText(displayText);
             }
             stmt = conn.prepareStatement("SELECT Employee_Name FROM employee WHERE Employee_ID = ?");
             stmt.setString(1, employeeID);
@@ -133,11 +186,13 @@ public class CheckoutDetails {
                 employeeID1.setText(employeeID);
                 employeeName.setText(rs.getString("Employee_Name"));
             }
-            conn.close();
+
             initialServiceTable();
             float roomsTotalMoney = Float.parseFloat(roomsTotal.getText().replace(",","."));
             float servicesTotalMoney = Float.parseFloat(servicesTotal.getText().replace(",","."));
-            totalMoney.setText(String.valueOf(roomsTotalMoney + servicesTotalMoney));
+            float totalMoney1 = (roomsTotalMoney + servicesTotalMoney)*(100-tierDiscountValue)/100;
+            totalMoney.setText(String.format("%.2f", totalMoney1));
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -145,12 +200,14 @@ public class CheckoutDetails {
     @FXML
     public void initialRoomTable() {
         System.out.println("initialRoomTable");
+
         try {
             Connection conn = DriverManager.getConnection(connectUrl, username, password);
-            PreparedStatement stmt = conn.prepareStatement("SELECT room.Room_ID, Room_Type, Room_Price, Room_Floor, Checkin_Date FROM checkin, room where room.Room_ID = checkin.Room_ID AND Guest_ID = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT room.Room_ID, Room_Type, Room_Price, Room_Floor, Checkin_Date,Expected_Checkout_Date  FROM checkin, room where room.Room_ID = checkin.Room_ID AND Guest_ID = ?");
             stmt.setString(1, customerID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
+
                 // Replace the column names with the actual names of your tableview columns
                 roomIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomID"));
                 roomTypeColumn.setCellValueFactory(new PropertyValueFactory<>("roomType"));
@@ -158,6 +215,8 @@ public class CheckoutDetails {
                 roomFloorColumn.setCellValueFactory(new PropertyValueFactory<>("roomFloor"));
                 checkinDateColumn.setCellValueFactory(new PropertyValueFactory<>("checkinDate"));
                 checkinTimeColumn.setCellValueFactory(new PropertyValueFactory<>("checkinTime"));
+
+
 
                 checkoutTimeColumn.setCellValueFactory(new PropertyValueFactory<>("checkoutTime"));
                 checkoutDateColumn.setCellValueFactory(new PropertyValueFactory<>("checkoutDate"));
@@ -168,9 +227,10 @@ public class CheckoutDetails {
                     return new SimpleObjectProperty<>(Time.valueOf(LocalTime.now()));
                 });
                 hoursColumn.setCellValueFactory(new PropertyValueFactory<>("hours"));
+                overCheckoutColumn.setCellValueFactory(new PropertyValueFactory<>("overCheckout"));
                 roomTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
                 // Create a new instance of your tableview object and add it to the tableview
-                CheckoutRoomDetails checkoutRoomDetails = new CheckoutRoomDetails(rs.getString("Room_ID"), rs.getString("Room_Type"), rs.getFloat("Room_Price"), rs.getInt("Room_Floor"), rs.getDate("Checkin_Date"), rs.getTime("Checkin_Date"), Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+                CheckoutRoomDetails checkoutRoomDetails = new CheckoutRoomDetails(rs.getString("Room_ID"), rs.getString("Room_Type"), rs.getFloat("Room_Price"), rs.getInt("Room_Floor"), rs.getDate("Checkin_Date"), rs.getTime("Checkin_Date") , Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()), rs.getDate("Expected_Checkout_Date"), rs.getTime("Expected_Checkout_Date"));
                 roomTable.getItems().add(checkoutRoomDetails);
             }
             float total = 0;
@@ -179,7 +239,11 @@ public class CheckoutDetails {
             }
             roomsTotal.setText(String.format("%.2f", total));
             conn.close();
-            roomTable.setPlaceholder(new Label(""));
+            roomTable.setFixedCellSize(25); // Set the height of each row
+            roomTable.prefHeightProperty().bind(Bindings.size(roomTable.getItems()).multiply(roomTable.getFixedCellSize()).add(50));
+            //roomTable.prefHeightProperty().bind(roomTable.fixedCellSizeProperty().multiply(Bindings.size(roomTable.getItems()).add(1.5))); // Bind the height of the table to the number of rows
+            roomTable.minHeightProperty().bind(roomTable.prefHeightProperty()); // Set the minimum height to the preferred height
+            roomTable.maxHeightProperty().bind(roomTable.prefHeightProperty()); // Set the maximum height to the preferred height
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -216,6 +280,11 @@ public class CheckoutDetails {
             }
             servicesTotal.setText(String.format("%.2f", total));
             conn.close();
+            serviceTable.setFixedCellSize(25); // Set the height of each row
+            serviceTable.prefHeightProperty().bind(Bindings.size(serviceTable.getItems()).multiply(serviceTable.getFixedCellSize()).add(27));
+            //roomTable.prefHeightProperty().bind(roomTable.fixedCellSizeProperty().multiply(Bindings.size(roomTable.getItems()).add(1.5))); // Bind the height of the table to the number of rows
+            serviceTable.minHeightProperty().bind(serviceTable.prefHeightProperty()); // Set the minimum height to the preferred height
+            serviceTable.maxHeightProperty().bind(serviceTable.prefHeightProperty());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -240,11 +309,16 @@ public class CheckoutDetails {
             float roomsTotalMoney = Float.parseFloat(roomsTotal.getText().replace(",","."));
             float servicesTotalMoney = Float.parseFloat(servicesTotal.getText().replace(",","."));
             float newServicesTotalMoney = 0;
+            float newRoomsTotalMoney = 0;
+            for (CheckoutRoomDetails room : roomTable.getItems()) {
+                newRoomsTotalMoney += room.getTotal();
+            }
             for (CheckoutServiceDetails service : serviceTable.getItems()) {
                 newServicesTotalMoney += service.getServiceTotal();
             }
             servicesTotal.setText(String.format("%.2f", newServicesTotalMoney));
-            totalMoney.setText(String.valueOf(roomsTotalMoney + newServicesTotalMoney));
+            roomsTotal.setText(String.format("%.2f", newRoomsTotalMoney));
+            totalMoney.setText(String.valueOf(newRoomsTotalMoney + newServicesTotalMoney));
         } else {
         // show an alert if no room is selected
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -259,7 +333,7 @@ public class CheckoutDetails {
     public void handleCheckoutButton() {
         try {
             Connection conn = DriverManager.getConnection(connectUrl, username, password);
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO checkout (Guest_ID, Room_ID, Checkout_Time, Checkout_Date, Total_Hours, Service_Total, Room_Total, Total, Employee_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO checkout (Guest_ID, Room_ID, Checkout_Time, Checkout_Date, Total_Hours, Over_Checkout, Service_Total, Room_Total, Total, Employee_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             PreparedStatement historyStmt = conn.prepareStatement("INSERT INTO checkin_history SELECT * FROM checkin WHERE Room_ID = ?");
             PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM checkin WHERE Room_ID = ?");
             PreparedStatement updateStmt = conn.prepareStatement("UPDATE room SET Room_Status = 'Trống' WHERE Room_ID = ?");
@@ -277,11 +351,12 @@ public class CheckoutDetails {
                 stmt.setString(2, room.getRoomID());
                 stmt.setDate(4, Date.valueOf(room.getCheckoutDate().toLocalDate()));
                 stmt.setTime(3, Time.valueOf(room.getCheckoutTime().toLocalTime()));
+                stmt.setInt(6, room.getOverCheckout());
                 stmt.setFloat(5, room.getHours());
-                stmt.setFloat(6, serviceTotal);
-                stmt.setFloat(7, room.getTotal());
-                stmt.setFloat(8, (serviceTotal+room.getTotal()));
-                stmt.setString(9, employeeID);
+                stmt.setFloat(7, serviceTotal);
+                stmt.setFloat(8, room.getTotal());
+                stmt.setFloat(9, (serviceTotal+room.getTotal()));
+                stmt.setString(10, employeeID);
                 stmt.executeUpdate();
                 historyStmt.setString(1, room.getRoomID());
                 historyStmt.executeUpdate();
@@ -295,24 +370,51 @@ public class CheckoutDetails {
                 deleteServiceStmt.executeUpdate();
             }
             insertBillStmt.setString(1, customerID);
-            insertBillStmt.setDate(2, Date.valueOf(nowDate.getValue()));
+            insertBillStmt.setDate(2, Date.valueOf(nowDate.getText()));
             insertBillStmt.setTime(3, Time.valueOf(nowTime.getText()));
             insertBillStmt.setFloat(4, Float.parseFloat(totalMoney.getText().replace(",",".")));
             insertBillStmt.setString(5, employeeID);
             insertBillStmt.executeUpdate();
+
+            PreparedStatement guestStmt = conn.prepareStatement("SELECT Number_Of_Checkin FROM guest WHERE Guest_ID = ?");
+            guestStmt.setString(1, customerID);
+            ResultSet guestResult = guestStmt.executeQuery();
+            if (guestResult.next() && guestResult.getInt("Number_Of_Checkin") == 1) {
+                String discountCoupon = customerID + "FirstCheckin";
+                PreparedStatement couponStmt = conn.prepareStatement("INSERT INTO coupon (Coupon_ID, Guest_ID, Discount_Percentage, Coupon_Status) VALUES (?, ?, ?, ?)");
+                couponStmt.setString(1, discountCoupon);
+                couponStmt.setString(2, customerID);
+                couponStmt.setInt(3, 20);
+                couponStmt.setString(4, "Khả dụng");
+                couponStmt.executeUpdate();
+                try {
+                    String qrCodeFilePath = "C:/Users/TienDat/Downloads/" +discountCoupon+ ".png";
+                    QRCodeGenerator.generateQRCode(discountCoupon, qrCodeFilePath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             conn.close();
+
+            // Print bill
+            printBill();
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Checkout Successful");
+            alert.setTitle("THÀNH CÔNG");
             alert.setHeaderText(null);
-            alert.setContentText("Checkout has been completed successfully!");
+            alert.setContentText("Checkout thành công!");
             alert.showAndWait();
         } catch (SQLException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Checkout Failed");
+            alert.setTitle("THẤT BẠI");
             alert.setHeaderText(null);
-            alert.setContentText("Checkout has failed. Please try again later.");
+            alert.setContentText("Checkout thất bại, xin hãy thử lại!");
             alert.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
     @FXML
@@ -321,6 +423,10 @@ public class CheckoutDetails {
         checkoutButton.setVisible(false);
         deleteRoomButton.setVisible(false);
         billButton.setVisible(false);
+        checkDiscountButton.setVisible(false);
+        discountInput.setVisible(false);
+        qrScanButton.setVisible(false);
+        qrCode.setVisible(false);
 
         // Create a new PDF document
         PDDocument document = new PDDocument();
@@ -369,14 +475,55 @@ public class CheckoutDetails {
         billButton.setVisible(true);
     }
     public void handleBackButton() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkout.fxml"));
         Parent dashboardParent = loader.load();
         CheckOutController checkOutController = loader.getController();
-        checkOutController.setEmployeeID(employeeID);
         Scene dashboardScene = new Scene(dashboardParent);
         Stage window = (Stage) backButton.getScene().getWindow();
         window.setScene(dashboardScene);
     }
+    @FXML
+    public void handleCheckDiscountButton(){
+        try {
+            Connection conn = DriverManager.getConnection(DataConnector.getDatabaseUrl(), DataConnector.getUsername(), DataConnector.getPassword());
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM coupon WHERE Coupon_ID = ? AND Guest_ID = ? AND Coupon_Status = ?");
+            stmt.setString(1, discountInput.getText());
+            stmt.setString(2, customerID);
+            stmt.setString(3, "Khả dụng");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalMoney.setText(String.format("%.2f", Float.parseFloat(totalMoney.getText().replace(",",".")) * (100 - rs.getInt("Discount_Percentage")) / 100));
+                couponDiscount.setText(rs.getInt("Discount_Percentage") + "%");
+                System.out.println("Discounted");
+            }
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    public void handleQRScanButton(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose QR code image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+        File file = fileChooser.showOpenDialog(qrScanButton.getScene().getWindow());
+        if (file != null) {
+            try {
+                BufferedImage image = ImageIO.read(file);
+                LuminanceSource source = new BufferedImageLuminanceSource(image);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                Result result = new MultiFormatReader().decode(bitmap);
+                String qrText = result.getText();
+                discountInput.setText(qrText);
 
+                // Set the image to the ImageView qrCode
+                Image qrImage = SwingFXUtils.toFXImage(image, null);
+                qrCode.setImage(qrImage);
+
+            } catch (IOException | NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

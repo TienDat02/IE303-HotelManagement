@@ -2,16 +2,19 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
@@ -19,168 +22,23 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.ie303hotelmanagement.ServiceController">
    <left>
-      <VBox fx:id="NavBarComponent" prefHeight="1080.0" prefWidth="314.0" style="-fx-background-color: #1C2127;" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="330.0" fitWidth="336.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Logo.png" />
-               </image>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </ImageView>
-            <Button fx:id="navDashboardButton" mnemonicParsing="false" onAction="#handleNavDashboardButton" prefHeight="69.0" prefWidth="308.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 20 20 20 20;" text="DASHBOARD">
-               <VBox.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Tahoma Bold" size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="navCheckinButton" mnemonicParsing="false" onAction="#handleNavCheckinButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK IN" textFill="WHITESMOKE">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="navCheckoutButton" mnemonicParsing="false" onAction="#handleNavCheckoutButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="CHECK OUT" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="navServiceButton" mnemonicParsing="false" onAction="#handleNavServiceButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="DỊCH VỤ" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="navCustomerButton" mnemonicParsing="false" onAction="#handleNavCustomerButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="KHÁCH HÀNG" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Line endX="275.0" stroke="#e7f1fb" strokeWidth="2.0">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="25.0" top="15.0" />
-               </VBox.margin>
-            </Line>
-            <Button fx:id="navRoomButton" mnemonicParsing="false" onAction="#handleNavRoomButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="PHÒNG" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="navEmployeeButton" mnemonicParsing="false" onAction="#handleNavEmployeeButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="NHÂN VIÊN" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="navReportButton" mnemonicParsing="false" onAction="#handleNavReportButton" prefHeight="25.0" prefWidth="335.0" style="-fx-background-color: #1C2127;" text="REPORT" textFill="WHITESMOKE">
-               <font>
-                  <Font name="Tahoma" size="24.0" />
-               </font>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Button>
-            <AnchorPane prefHeight="66.0" prefWidth="330.0">
-               <children>
-                  <Button fx:id="LogoutButton" layoutX="34.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="60.0" prefWidth="208.0" style="-fx-background-color: #1C2127;" text="ĐĂNG XUẤT" textFill="WHITESMOKE" AnchorPane.topAnchor="1.0">
-                     <font>
-                        <Font name="Tahoma" size="24.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="15.0" top="15.0" />
-                     </padding>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <ImageView fitHeight="43.0" fitWidth="43.0" layoutX="220.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@logout-icon.png" />
-                     </image>
-                  </ImageView>
-               </children>
-               <VBox.margin>
-                  <Insets top="30.0" />
-               </VBox.margin>
-            </AnchorPane>
-            <Group />
-         </children>
-      </VBox>
+      <fx:include fx:id="navbar" source="Navbar.fxml" />
    </left>
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Text layoutX="54.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ DỊCH VỤ" wrappingWidth="591.7509460449219">
+            <Text layoutX="54.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="QUẢN LÝ DỊCH VỤ" wrappingWidth="591.7509460449219" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="40.0">
                <font>
-                  <Font name="Arial Bold" size="50.0" />
+                  <Font name="Times New Roman Bold" size="48.0" />
                </font>
             </Text>
             <TableView fx:id="serviceTable" layoutX="861.0" layoutY="229.0" prefHeight="711.0" prefWidth="701.0">
               <columns>
-                <TableColumn fx:id="serviceIDColumn" minWidth="0.0" prefWidth="87.0" text="MÃ DỊCH VỤ" />
-                  <TableColumn fx:id="serviceNameColumn" prefWidth="197.0" text="TÊN DỊCH VỤ " />
-                  <TableColumn fx:id="servicePriceColumn" minWidth="0.0" prefWidth="137.0" text="BẢNG GIÁ NIÊM YẾT" />
-                  <TableColumn fx:id="serviceDescriptionColumn" minWidth="0.0" prefWidth="279.0" text="MÔ TẢ" />
+                <TableColumn fx:id="serviceIDColumn" minWidth="0.0" prefWidth="60.0" style="-fx-font-size: 15; -fx-alignment: center; -fx-text-fill: white;" text="MDV" />
+                  <TableColumn fx:id="serviceNameColumn" prefWidth="159.0" style="-fx-font-size: 15; -fx-alignment: center; -fx-text-fill: white;" text="TÊN DỊCH VỤ " />
+                  <TableColumn fx:id="servicePriceColumn" minWidth="0.0" prefWidth="102.0" style="-fx-font-size: 15; -fx-alignment: center; -fx-text-fill: white;" text="GIÁ" />
+                  <TableColumn fx:id="serviceStatusColumn" maxWidth="200.0" minWidth="0.0" prefWidth="145.0" style="-fx-font-size: 15; -fx-alignment: center; -fx-text-fill: white;" text="TRẠNG THÁI" />
+                  <TableColumn fx:id="serviceDescriptionColumn" minWidth="0.0" prefWidth="233.0" style="-fx-font-size: 15; -fx-text-fill: white;" text="MÔ TẢ" />
               </columns>
                <padding>
                   <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
@@ -189,7 +47,6 @@
                   <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                </opaqueInsets>
             </TableView>
-            <Line endX="1375.2000732421875" endY="7.62939453125E-6" layoutX="216.0" layoutY="105.0" startX="-216.0" startY="7.62939453125E-6" />
             <AnchorPane layoutX="861.0" layoutY="140.0" prefHeight="62.0" prefWidth="282.0" style="-fx-background-color: #fffdfd;">
                <children>
                   <Line endX="1462.400146484375" endY="-2.0" layoutX="-1190.0" layoutY="55.0" startX="1208.0" startY="-2.0" />
@@ -211,7 +68,7 @@
                   <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                </padding>
             </AnchorPane>
-            <Button fx:id="addServiceButton" layoutX="861.0" layoutY="953.0" mnemonicParsing="false" onAction="#handlePopUpAddServiceButton" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Thêm" textFill="#181818">
+            <Button fx:id="addServiceButton" layoutX="861.0" layoutY="953.0" mnemonicParsing="false" onAction="#handlePopUpAddServiceButton" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #1C2127; -fx-background-radius: 20 20 20 20;" text="Thêm" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -221,8 +78,11 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <effect>
+                  <DropShadow />
+               </effect>
             </Button>
-            <Button fx:id="alterServiceButton" layoutX="1403.0" layoutY="953.0" mnemonicParsing="false" onAction="#handlePopUpAlterServiceButton" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Sửa" textFill="#181818">
+            <Button fx:id="alterServiceButton" layoutX="1403.0" layoutY="953.0" mnemonicParsing="false" onAction="#handlePopUpAlterServiceButton" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #1C2127; -fx-background-radius: 20 20 20 20;" text="Sửa" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -232,8 +92,11 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <effect>
+                  <DropShadow />
+               </effect>
             </Button>
-            <Button fx:id="deleteServiceButton" layoutX="1146.0" layoutY="953.0" mnemonicParsing="false" onAction="#handleDeleteServiceButton" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #D9D9D9;" text="Xóa" textFill="#181818">
+            <Button fx:id="deleteServiceButton" layoutX="1146.0" layoutY="953.0" mnemonicParsing="false" onAction="#handleDeleteServiceButton" prefHeight="61.0" prefWidth="159.0" style="-fx-background-color: #1C2127; -fx-background-radius: 20 20 20 20;" text="Xóa" textFill="WHITE">
                <font>
                   <Font name="Tahoma" size="24.0" />
                </font>
@@ -243,152 +106,166 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <effect>
+                  <DropShadow />
+               </effect>
             </Button>
-            <AnchorPane layoutX="22.0" layoutY="116.0" prefHeight="940.0" prefWidth="823.0" style="-fx-background-color: #1C2127;">
+            <AnchorPane layoutX="22.0" layoutY="116.0" prefHeight="940.0" prefWidth="823.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;">
                <children>
-                  <Text fill="WHITE" layoutX="1.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DỊCH VỤ PHÒNG" textAlignment="CENTER" wrappingWidth="820.13671875">
+                  <Text layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DỊCH VỤ PHÒNG" textAlignment="CENTER" wrappingWidth="820.13671875">
                      <font>
                         <Font name="Tahoma Bold" size="40.0" />
                      </font>
                   </Text>
-                  <VBox layoutX="96.0" layoutY="395.0" prefHeight="392.0" prefWidth="200.0" AnchorPane.topAnchor="395.0">
+                  <VBox layoutX="106.0" layoutY="408.0" prefHeight="407.0" prefWidth="612.0" AnchorPane.topAnchor="408.0">
                      <children>
-                        <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Phòng:">
+                        <Text fill="#433d3d" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Phòng:">
                            <font>
                               <Font name="Tahoma" size="25.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
+                              <Insets />
                            </VBox.margin>
                         </Text>
-                        <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Dịch vụ:">
+                        <ComboBox fx:id="serviceRoomIDField" editable="true" prefHeight="42.0" prefWidth="611.0">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </ComboBox>
+                        <HBox prefHeight="36.0" prefWidth="400.0">
+                           <children>
+                              <Text fill="#433d3d" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Dịch vụ:">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="serviceNameField" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên dịch vụ" textAlignment="RIGHT" wrappingWidth="485.4677734375">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <TextField fx:id="serviceIDField" onAction="#handleServiceIDField" prefHeight="42.0" prefWidth="165.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
+                           </padding>
                            <font>
                               <Font name="Tahoma" size="25.0" />
                            </font>
+                        </TextField>
+                        <HBox prefHeight="36.0" prefWidth="400.0">
+                           <children>
+                              <Text fill="#433d3d" strokeType="OUTSIDE" strokeWidth="0.0" text="Thời gian:" wrappingWidth="162.9169921875">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày:" wrappingWidth="198.9169921875">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="44.0" prefWidth="400.0">
+                           <children>
+                              <TextField fx:id="serviceTimeField" prefHeight="42.0" prefWidth="152.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" top="5.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <DatePicker fx:id="serviceDateField" prefHeight="42.0" prefWidth="489.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" top="5.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </DatePicker>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="40.0" prefWidth="612.0">
+                           <children>
+                              <Text fill="#433d3d" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng:" wrappingWidth="159.84814453125">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#433d3d" strokeType="OUTSIDE" strokeWidth="0.0" text="Ghi chú">
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                              </Text>
+                           </children>
                            <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
+                              <Insets top="15.0" />
                            </VBox.margin>
-                        </Text>
-                        <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên Dịch vụ:">
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày:">
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Thời gian:">
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng:">
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Text>
+                        </HBox>
+                        <HBox prefHeight="49.0" prefWidth="612.0">
+                           <children>
+                              <TextField fx:id="serviceQuantityField" prefHeight="42.0" prefWidth="111.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" top="5.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Tahoma" size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <TextField fx:id="serviceNoteField" prefHeight="42.0" prefWidth="450.0">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding></TextField>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
-                  <VBox layoutX="304.0" layoutY="395.0" prefHeight="377.0" prefWidth="400.0" AnchorPane.topAnchor="395.0">
-                     <children>
-                        <TextField fx:id="serviceRoomIDField">
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font></TextField>
-                        <TextField fx:id="serviceIDField" onAction="#handleServiceIDField">
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                        </TextField>
-                        <Text fx:id="serviceNameField" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên dịch vụ" textAlignment="CENTER" wrappingWidth="399.4677734375">
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="15.0" top="15.0" />
-                           </VBox.margin>
-                        </Text>
-                        <DatePicker fx:id="serviceDateField" prefHeight="44.0" prefWidth="398.0">
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                        </DatePicker>
-                        <TextField fx:id="serviceTimeField">
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="serviceQuantityField" prefWidth="398.0">
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="Tahoma" size="25.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                        </TextField>
-                     </children>
-                  </VBox>
-                  <Button fx:id="serviceAllocateButton" layoutX="96.0" layoutY="815.0" mnemonicParsing="false" onAction="#handleServiceAllocateButton" prefHeight="59.0" prefWidth="168.0" text="THỰC HIỆN">
+                  <Button fx:id="serviceAllocateButton" layoutX="511.0" layoutY="806.0" mnemonicParsing="false" onAction="#handleServiceAllocateButton" prefHeight="59.0" prefWidth="207.0" style="-fx-background-color: #1C2127; -fx-background-radius: 20 20 20 20;" text="THỰC HIỆN" textFill="WHITE">
                      <font>
                         <Font name="Tahoma" size="25.0" />
                      </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
                   </Button>
-                  <Button fx:id="serviceCancelButton" layoutX="449.0" layoutY="815.0" mnemonicParsing="false" onAction="#handleServiceCancelButton" prefHeight="59.0" prefWidth="175.0" text="HỦY">
+                  <Button fx:id="serviceCancelButton" layoutX="106.0" layoutY="806.0" mnemonicParsing="false" onAction="#handleServiceCancelButton" prefHeight="59.0" prefWidth="175.0" style="-fx-background-color: #1C2127; -fx-background-radius: 20 20 20 20;" text="HỦY" textFill="WHITE">
                      <font>
                         <Font name="Tahoma" size="25.0" />
                      </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
                   </Button>
-                  <TableView fx:id="roomServiceTable" layoutX="19.0" layoutY="63.0" prefHeight="319.0" prefWidth="783.0">
+                  <TableView fx:id="roomServiceTable" layoutX="19.0" layoutY="63.0" prefHeight="320.0" prefWidth="783.0">
                     <columns>
-                      <TableColumn fx:id="idColumn" prefWidth="60.0" text="ID" />
-                      <TableColumn fx:id="roomServiceIDColumn" prefWidth="84.0" text="ID Dịch vụ" />
-                        <TableColumn fx:id="roomServiceNameColumn" prefWidth="148.0" text="Tên dịch vụ" />
-                        <TableColumn fx:id="roomServiceRoomIDColumn" prefWidth="132.0" text="ID Phòng" />
-                        <TableColumn fx:id="roomServiceDateColumn" prefWidth="140.0" text="Ngày" />
-                        <TableColumn fx:id="roomServiceTimeColumn" prefWidth="148.0" text="Thời gian" />
-                        <TableColumn fx:id="roomServiceQuantityColumn" prefWidth="70.0" text="Số lượng" />
+                      <TableColumn fx:id="idColumn" prefWidth="40.0" style="-fx-font-size: 15; -fx-alignment: center;" text="ID" />
+                      <TableColumn fx:id="roomServiceIDColumn" prefWidth="60.0" style="-fx-font-size: 15; -fx-alignment: center;" text="ID DV" />
+                        <TableColumn fx:id="roomServiceNameColumn" prefWidth="123.0" style="-fx-font-size: 15; -fx-alignment: center;" text="Tên dịch vụ" />
+                        <TableColumn fx:id="roomServiceRoomIDColumn" prefWidth="73.0" style="-fx-font-size: 15; -fx-alignment: center;" text="ID Phòng" />
+                        <TableColumn fx:id="roomServiceDateColumn" prefWidth="129.0" style="-fx-font-size: 15; -fx-alignment: center;" text="Ngày" />
+                        <TableColumn fx:id="roomServiceTimeColumn" prefWidth="139.0" style="-fx-font-size: 15; -fx-alignment: center;" text="Thời gian" />
+                        <TableColumn fx:id="roomServiceQuantityColumn" prefWidth="44.0" style="-fx-font-size: 15; -fx-alignment: center;" text="SL" />
+                        <TableColumn fx:id="roomServiceNoteColumn" prefWidth="174.0" style="-fx-font-size: 15;" text="Ghi chú" />
                     </columns>
                   </TableView>
                </children>
+               <effect>
+                  <DropShadow height="11.73" radius="8.295" width="23.45" />
+               </effect>
             </AnchorPane>
+            <Separator layoutX="22.0" layoutY="102.0" prefWidth="1540.0" />
          </children>
       </AnchorPane>
    </center>

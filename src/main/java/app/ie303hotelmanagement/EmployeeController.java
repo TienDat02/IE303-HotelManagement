@@ -22,13 +22,11 @@ import net.sf.jasperreports.engine.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 
-public class QLNVController {
+public class EmployeeController {
     @FXML
     private TableView<NhanVien> tblNhanVien;
     @FXML
@@ -65,7 +63,7 @@ public class QLNVController {
     private Button navCustomerButton;
     @FXML
     private Button navReportButton;
-    private String employeeID;
+    private String employeeID  = EmployeeSingleton.getInstance().getEmployeeID();
     private String connectUrl = DataConnector.getDatabaseUrl();
     private String username = DataConnector.getUsername();
     private String password = DataConnector.getPassword();
@@ -214,104 +212,6 @@ public class QLNVController {
             tblNhanVien.getItems().remove(selectedNhanVien);
         }
     }
-    @FXML
-    public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
-        Parent dashboardParent = loader.load();
-        DashboardController dashboardController = loader.getController();
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navDashboardButton.getScene().getWindow();
-        dashboardController.initialize(employeeID);
-        window.setScene(dashboardScene);
-    }
-    //Navitation
-    @FXML
-    public void handleNavCustomerButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Customer.fxml"));
-        Parent dashboardParent = loader.load();
-        CustomerController customerController = loader.getController();
-        customerController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCustomerButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavServiceButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Service.fxml"));
-        Parent dashboardParent = loader.load();
-        ServiceController serviceController = loader.getController();
-        serviceController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navServiceButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavRoomButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
-        Parent dashboardParent = loader.load();
-        RoomController roomController = loader.getController();
-        roomController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navRoomButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
-    @FXML// đây là hàm để chuyển qua trang Checkin
-    public void handleNavCheckinButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckinController checkinController = loader.getController();
-        checkinController.setEmployeeID(employeeID);
-        System.out.println("employeeID in DashboardController: " + employeeID); // Add this line
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckinButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
-    @FXML
-    public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckOutController checkOut = loader.getController();
-        checkOut.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckoutButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
-        Parent dashboardParent = loader.load();
-        QLNVController qlnvController = loader.getController();
-        qlnvController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navEmployeeButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Report.fxml"));
-        Parent dashboardParent = loader.load();
-        ReportController reportController = loader.getController();
-        reportController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navReportButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML// đây là hàm để đăng xuất
-    void handleLogoutButton(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có muốn đăng xuất?");
-        alert.setHeaderText(null);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Parent root = FXMLLoader.load(getClass().getResource("Login-Page.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) LogoutButton.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        }
-    }
-
     public void handlePrintEmployeeList() throws JRException, SQLException, ClassNotFoundException {
         // Establish a connection to the database
         Connection connection = DriverManager.getConnection(connectUrl, username, password);

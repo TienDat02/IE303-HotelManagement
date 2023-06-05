@@ -14,10 +14,13 @@ public class CheckoutRoomDetails {
     private Time checkinTime;
     private Time checkoutTime;
     private Date checkoutDate;
+    private Date expectedCheckoutDate;
+    private Time expectedCheckoutTime;
+    private int overCheckout;
     private float hours;
     private float total;
 
-    public CheckoutRoomDetails(String roomID, String roomType, float roomPrice, int roomFloor, Date checkinDate, Time checkinTime, Date checkoutDate, Time checkoutTime) {
+    public CheckoutRoomDetails(String roomID, String roomType, float roomPrice, int roomFloor, Date checkinDate, Time checkinTime, Date checkoutDate, Time checkoutTime, Date expectedCheckoutDate, Time expectedCheckoutTime) {
         this.roomID = roomID;
         this.roomType = roomType;
         this.roomPrice = roomPrice;
@@ -26,12 +29,22 @@ public class CheckoutRoomDetails {
         this.checkinTime = checkinTime;
         this.checkoutDate = checkoutDate;
         this.checkoutTime = checkoutTime;
-        LocalDateTime checkinDateTime = LocalDateTime.of(checkinDate.toLocalDate(), checkinTime.toLocalTime());
 
+        LocalDateTime checkinDateTime = LocalDateTime.of(checkinDate.toLocalDate(), checkinTime.toLocalTime());
+        LocalDateTime expectedCheckoutDateTime = LocalDateTime.of(expectedCheckoutDate.toLocalDate(), expectedCheckoutTime.toLocalTime());
         LocalDateTime checkoutDateTime = LocalDateTime.of(checkoutDate.toLocalDate(), checkoutTime.toLocalTime());
         Duration duration = Duration.between(checkinDateTime, checkoutDateTime);
+        Duration expectedDuration = Duration.between(expectedCheckoutDateTime, checkoutDateTime);
+        this.overCheckout = (int) expectedDuration.toHours();
+        if (overCheckout < 0) {
+            overCheckout = 0;
+        }
         this.hours = duration.toHours();
-        total = (hours/24) * roomPrice;
+        if (overCheckout <= 1){
+            this.total = (hours/24) * roomPrice;
+        } else {
+            this.total = (hours / 24) * roomPrice + (overCheckout / 24) * roomPrice * 1.5f;
+        }
     }
     public void setRoomID(String roomID) {
         this.roomID = roomID;
@@ -92,6 +105,12 @@ public class CheckoutRoomDetails {
     }
     public float getTotal() {
         return total;
+    }
+    public int getOverCheckout() {
+        return overCheckout;
+    }
+    public void setOverCheckout(int overCheckout) {
+        this.overCheckout = overCheckout;
     }
 
 }

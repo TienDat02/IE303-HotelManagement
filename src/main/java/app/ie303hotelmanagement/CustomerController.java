@@ -1,7 +1,10 @@
 package app.ie303hotelmanagement;
 
+import effects.ButtonAnimation;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,86 +18,60 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 // Define CustomerController class
 public class CustomerController {
-    @FXML
-    private TextField inputCCCD;
-    @FXML
-    private TextField inputName;
-    @FXML
-    private TextField inputPhoneNumber;
-    @FXML
-    private TextField inputNote;
-    @FXML
-    private TextField inputBirthYear;
-    @FXML
-    private TextField findingCustomer;
-    @FXML
-    private Button updateCustomerButton;
-    @FXML
-    private Button addCustomerButton;
-    @FXML
-    private Button checkInButton;
-    @FXML
-    private Button alterCustomerButton;
-    @FXML
-    private Button deleteCustomerButton;
-    @FXML
-    private Button CustomerButton;
-    @FXML
-    private Button LogoutButton;
-    @FXML
-    private TableView<Customer> customerTable;
-    @FXML
-    private TableColumn<Customer, Long> sttColumn;
-    @FXML
-    private TableColumn<Customer, Integer> birthYearColumn;
-    @FXML
-    private TableColumn<Customer, String> nameColumn;
-    @FXML
-    private TableColumn<Customer, String> cccdColumn;
-    @FXML
-    private TableColumn<Customer, Long> phoneNumberColumn;
-    @FXML
-    private TableColumn<Customer, String> noteColumn;
+    @FXML private TextField inputCCCD;
+    @FXML private TextField inputName;
+    @FXML private TextField inputPhoneNumber;
+    @FXML private TextField inputNote;
+    @FXML private TextField inputBirthYear;
+    @FXML private ComboBox<String> inputTier;
+    @FXML private TextField inputNumberOfCheckin;
+    @FXML private TextField findingCustomer;
+    @FXML private Button addCustomerButton;
+    @FXML private Button alterCustomerButton;
+    @FXML private Button deleteCustomerButton;
+    @FXML private Button policyChangeButton;
+    @FXML private Button updateTierButton;
+
+    @FXML private TableView<Customer> customerTable;
+    @FXML private TableColumn<Customer, Long> sttColumn;
+    @FXML private TableColumn<Customer, Integer> birthYearColumn;
+    @FXML private TableColumn<Customer, String> nameColumn;
+    @FXML private TableColumn<Customer, String> cccdColumn;
+    @FXML private TableColumn<Customer, Long> phoneNumberColumn;
+    @FXML private TableColumn<Customer, String> noteColumn;
+    @FXML private TableColumn<Customer, String> tierColumn;
+    @FXML private TableColumn<Customer, Integer> numberOfCheckinColumn;
+
     long count = 1;
     private String databaseUrl = DataConnector.getDatabaseUrl() ;
     private String databaseUsername = DataConnector.getUsername();
     private String databasePassword = DataConnector.getPassword();
-    private String employeeID;
-    @FXML
-    private Button navServiceButton;
-    @FXML
-    private Button navRoomButton;
-    @FXML
-    private Button navDashboardButton;
-    @FXML
-    private Button navCheckinButton;
-    @FXML
-    private Button navEmployeeButton;
-    @FXML
-    private Button navCheckoutButton;
-    @FXML
-    private Button navCustomerButton;
-    @FXML
-    private Button navReportButton;
+    private String employeeID  = EmployeeSingleton.getInstance().getEmployeeID();
 
+    @FXML
     public void initialize() {
+
+        ObservableList<String> tierList = FXCollections.observableArrayList();
+        tierList.addAll("Mới", "Bạc", "Vàng", "Kim Cương");
+        inputTier.setItems(tierList);
+        System.out.println("diamondPercent: " + TiersSingleton.getInstance().getDiamondDiscount());
         try {
             Connection conn = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM guest");
-
             while (rs.next()) {
                 String guestID = rs.getString("Guest_ID");
                 String guestName = rs.getString("Guest_Name");
                 int guestBirthYear = rs.getInt("Guest_BirthYear");
                 String guestPhone = rs.getString("Guest_Phone");
                 String guestNote = rs.getString("Guest_Notes");
-
-                Customer customer = new Customer(count, guestID, guestName, guestBirthYear, guestPhone, guestNote);
+                String guestTier = rs.getString("Guest_Tier");
+                int numberOfCheckin = rs.getInt("Number_Of_Checkin");
+                Customer customer = new Customer(count, guestID, guestName, numberOfCheckin, guestTier, guestBirthYear, guestPhone, guestNote);
                 customerTable.getItems().add(customer);
                 count++;
             }
@@ -104,6 +81,8 @@ public class CustomerController {
             birthYearColumn.setCellValueFactory(new PropertyValueFactory<>("birthYear"));
             phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
             noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
+            tierColumn.setCellValueFactory(new PropertyValueFactory<>("tier"));
+            numberOfCheckinColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfCheckin"));
 
             sttColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Customer, Long>, ObservableValue<Long>>() {
                 @Override
@@ -122,22 +101,70 @@ public class CustomerController {
                     }
                 }
             });
-
-            customerTable.getColumns().addAll(sttColumn, cccdColumn, nameColumn, birthYearColumn, phoneNumberColumn, noteColumn);
-            customerTable.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 1) {
-                    Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
-                    if (selectedCustomer != null) {
-                        inputCCCD.setText(selectedCustomer.getCccd());
-                        inputName.setText(selectedCustomer.getName());
-                        inputBirthYear.setText(String.valueOf(selectedCustomer.getBirthYear()));
-                        inputPhoneNumber.setText(selectedCustomer.getPhoneNumber());
-                        inputNote.setText(selectedCustomer.getNote());
-                    }
+            customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    inputCCCD.setText(newSelection.getCccd());
+                    inputName.setText(newSelection.getName());
+                    inputBirthYear.setText(String.valueOf(newSelection.getBirthYear()));
+                    inputPhoneNumber.setText(newSelection.getPhoneNumber());
+                    inputNote.setText(newSelection.getNote());
+                    inputTier.setValue(newSelection.getTier());
+                    inputNumberOfCheckin.setText(String.valueOf(newSelection.getNumberOfCheckin()));
                 }
             });
-
             conn.close();
+            ButtonAnimation.addHoverEffect(addCustomerButton);
+            ButtonAnimation.addHoverEffect(alterCustomerButton);
+            ButtonAnimation.addHoverEffect(deleteCustomerButton);
+            ButtonAnimation.addHoverEffect(updateTierButton);
+            ButtonAnimation.addHoverEffect(policyChangeButton);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML public void handleCustomerUpdateTier(){
+        try {
+            Connection conn = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+            PreparedStatement stmt = conn.prepareStatement("Select * from guest");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                String guestID = rs.getString("Guest_ID");
+                PreparedStatement getBill = conn.prepareStatement("SELECT sum(Total_Cost) as Total FROM bill where Guest_ID = ? order by Bill_Date LIMIT ?");
+                getBill.setString(1, guestID);
+                getBill.setInt(2, TiersSingleton.getInstance().getDiamondNearestCheckouts());
+                ResultSet billResult = getBill.executeQuery();
+                if (billResult.next() && billResult.getFloat("Total") >= TiersSingleton.getInstance().getDiamondNearestCheckoutValue()) {
+                    PreparedStatement stmt6 = conn.prepareStatement("UPDATE guest SET Guest_Tier = 'Kim cương' WHERE Guest_ID = ?");
+                    stmt6.setString(1, guestID);
+                    stmt6.executeUpdate();
+                } else {
+                    PreparedStatement getBill2 = conn.prepareStatement("SELECT sum(Total_Cost) as Total FROM bill where Guest_ID = ? order by Bill_Date LIMIT ?");
+                    getBill2.setString(1, guestID);
+                    getBill2.setInt(2, TiersSingleton.getInstance().getGoldNearestCheckouts());
+                    ResultSet billResult2 = getBill2.executeQuery();
+                    if (billResult2.next() && billResult2.getFloat("Total") >= TiersSingleton.getInstance().getGoldNearestCheckoutValue()) {
+                        PreparedStatement stmt6 = conn.prepareStatement("UPDATE guest SET Guest_Tier = 'Vàng' WHERE Guest_ID = ?");
+                        stmt6.setString(1, guestID);
+                        stmt6.executeUpdate();
+                    } else {
+                        PreparedStatement getBill3 = conn.prepareStatement("SELECT sum(Total_Cost) as Total FROM bill where Guest_ID = ? order by Bill_Date LIMIT ?");
+                        getBill3.setString(1, guestID);
+                        getBill3.setInt(2, TiersSingleton.getInstance().getSilverNearestCheckouts());
+                        ResultSet billResult3 = getBill3.executeQuery();
+                        if (billResult3.next() && billResult3.getFloat("Total") >= TiersSingleton.getInstance().getSilverNearestCheckoutValue()) {
+                            PreparedStatement stmt6 = conn.prepareStatement("UPDATE guest SET Guest_Tier = 'Bạc' WHERE Guest_ID = ?");
+                            stmt6.setString(1, guestID);
+                            stmt6.executeUpdate();
+                        } else {
+                            PreparedStatement stmt6 = conn.prepareStatement("UPDATE guest SET Guest_Tier = 'Mới' WHERE Guest_ID = ?");
+                            stmt6.setString(1, guestID);
+                            stmt6.executeUpdate();
+                        }
+                        getBill3.close();
+                    }
+                }
+                getBill.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -150,6 +177,8 @@ public class CustomerController {
         int birthYear = Integer.parseInt(inputBirthYear.getText());
         String phoneNumber = inputPhoneNumber.getText();
         String note = inputNote.getText();
+        String tier = inputTier.getValue();
+        int numberOfCheckin = Integer.parseInt(inputNumberOfCheckin.getText());
 
         // Check if the customer already exists in the database
         try (Connection conn = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword)) {
@@ -178,16 +207,18 @@ public class CustomerController {
 
         // If the customer doesn't exist, insert the new customer into the database
         try (Connection conn = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword)) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO guest (Guest_ID, Guest_Name, Guest_BirthYear, Guest_Phone, Guest_Notes) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO guest (Guest_ID, Guest_Name, Number_Of_Checkin, Guest_Tier, Guest_BirthYear, Guest_Phone, Guest_Notes) VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setString(1, cccd);
             stmt.setString(2, name);
-            stmt.setInt(3, birthYear);
-            stmt.setString(4, phoneNumber);
-            stmt.setString(5, note);
+            stmt.setInt(3, numberOfCheckin);
+            stmt.setString(4, tier);
+            stmt.setInt(5, birthYear);
+            stmt.setString(6, phoneNumber);
+            stmt.setString(7, note);
             stmt.executeUpdate();
 
             // Add the new customer to the customerTable
-            Customer customer = new Customer(count, cccd, name, birthYear, phoneNumber, note);
+            Customer customer = new Customer(count, cccd, name,numberOfCheckin, tier, birthYear, phoneNumber, note);
             customerTable.getItems().add(customer);
 
 
@@ -197,6 +228,8 @@ public class CustomerController {
             alert.setHeaderText("Thêm khách hàng thành công");
             alert.setContentText("Đã thêm khách hàng " + name + " vào cơ sở dữ liệu.");
             alert.showAndWait();
+            Log addCustomerLog = new Log(LocalDateTime.now(), "Thêm khách hàng", "Thành công", "Thêm khách hàng có CCCD " + cccd + " vào cơ sở dữ liệu.");
+            addCustomerLog.insertLog();
         } catch (SQLException e) {
             // If there's an error with the database connection, show an alert to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -248,6 +281,8 @@ public class CustomerController {
             alert.setHeaderText("Xóa khách hàng thành công");
             alert.setContentText("Đã xóa khách hàng " + selectedCustomer.getName() + " khỏi cơ sở dữ liệu.");
             alert.showAndWait();
+            Log deleteCustomerLog = new Log(LocalDateTime.now(), "Xóa khách hàng", "Thành công", "Thêm khách hàng có CCCD " + selectedCustomer.getCccd() + " vào cơ sở dữ liệu.");
+            deleteCustomerLog.insertLog();
         } catch (SQLException e) {
             // If there's an error with the database connection, show an alert to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -265,6 +300,8 @@ public class CustomerController {
         int birthYear = Integer.parseInt(inputBirthYear.getText());
         String phoneNumber = inputPhoneNumber.getText();
         String note = inputNote.getText();
+        int numberOfCheckin = Integer.parseInt(inputNumberOfCheckin.getText());
+        String tier = inputTier.getValue().toString();
 
         // Get the selected customer from the customerTable
         Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -277,16 +314,18 @@ public class CustomerController {
 
             if (rs.next()) {
                 // If the customer already exists, update their information in the database
-                PreparedStatement updateStmt = conn.prepareStatement("UPDATE guest SET Guest_Name = ?, Guest_BirthYear = ?, Guest_Phone = ?, Guest_Notes = ? WHERE Guest_ID = ?");
+                PreparedStatement updateStmt = conn.prepareStatement("UPDATE guest SET Guest_Name = ?, Number_Of_Checkin = ?, Guest_Tier = ?, Guest_BirthYear = ?, Guest_Phone = ?, Guest_Notes = ? WHERE Guest_ID = ?");
                 updateStmt.setString(1, name);
-                updateStmt.setInt(2, birthYear);
-                updateStmt.setString(3, phoneNumber);
-                updateStmt.setString(4, note);
-                updateStmt.setString(5, cccd);
+                updateStmt.setInt(2, numberOfCheckin);
+                updateStmt.setString(3, tier);
+                updateStmt.setInt(4, birthYear);
+                updateStmt.setString(5, phoneNumber);
+                updateStmt.setString(6, note);
+                updateStmt.setString(7, cccd);
                 updateStmt.executeUpdate();
 
                 // Update the customer in the customerTable
-                Customer updatedCustomer = new Customer(selectedCustomer.getSTT(), cccd, name, birthYear, phoneNumber, note);
+                Customer updatedCustomer = new Customer(selectedCustomer.getSTT(), cccd, name, numberOfCheckin, tier, birthYear, phoneNumber, note);
                 customerTable.getItems().set(customerTable.getSelectionModel().getSelectedIndex(), updatedCustomer);
 
                 // Show an alert to the user
@@ -295,6 +334,8 @@ public class CustomerController {
                 alert.setHeaderText("Cập nhật thông tin khách hàng thành công");
                 alert.setContentText("Đã cập nhật thông tin khách hàng " + name + " trong cơ sở dữ liệu.");
                 alert.showAndWait();
+                Log updateCustomerLog = new Log(LocalDateTime.now(), "Sửa khách hàng", "Thành công", "Sửa thông khách hàng có CCCD " + cccd + " trong cơ sở dữ liệu.");
+                updateCustomerLog.insertLog();
             } else {
                 // If the customer doesn't exist, show an alert to the user
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -346,105 +387,22 @@ public class CustomerController {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void getPolicyChange(){
+        //open ChangePolicy.fxml
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangePolicy.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Thay đổi chính sách");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
-    }
-    @FXML
-    public void handleNavDashboardButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
-        Parent dashboardParent = loader.load();
-        DashboardController dashboardController = loader.getController();
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navDashboardButton.getScene().getWindow();
-        dashboardController.initialize(employeeID);
-        window.setScene(dashboardScene);
-    }
-    //Navitation
-    @FXML
-    public void handleNavCustomerButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Customer.fxml"));
-        Parent dashboardParent = loader.load();
-        CustomerController customerController = loader.getController();
-        customerController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCustomerButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavServiceButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Service.fxml"));
-        Parent dashboardParent = loader.load();
-        ServiceController serviceController = loader.getController();
-        serviceController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navServiceButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavRoomButton(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Room.fxml"));
-        Parent dashboardParent = loader.load();
-        RoomController roomController = loader.getController();
-        roomController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navRoomButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
-    @FXML// đây là hàm để chuyển qua trang Checkin
-    public void handleNavCheckinButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkin.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckinController checkinController = loader.getController();
-        checkinController.setEmployeeID(employeeID);
-        System.out.println("employeeID in DashboardController: " + employeeID); // Add this line
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckinButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-
-    @FXML
-    public void handleNavCheckoutButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
-        Parent dashboardParent = loader.load();
-        CheckOutController checkOut = loader.getController();
-        checkOut.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navCheckoutButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavEmployeeButton(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeePage.fxml"));
-        Parent dashboardParent = loader.load();
-        QLNVController qlnvController = loader.getController();
-        qlnvController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navEmployeeButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML
-    public void handleNavReportButton(ActionEvent event) throws IOException, SQLException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Report.fxml"));
-        Parent dashboardParent = loader.load();
-        ReportController reportController = loader.getController();
-        reportController.setEmployeeID(employeeID);
-        Scene dashboardScene = new Scene(dashboardParent);
-        Stage window = (Stage) navReportButton.getScene().getWindow();
-        window.setScene(dashboardScene);
-    }
-    @FXML// đây là hàm để đăng xuất
-    void handleLogoutButton(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có muốn đăng xuất?");
-        alert.setHeaderText(null);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Parent root = FXMLLoader.load(getClass().getResource("Login-Page.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) LogoutButton.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        }
     }
 }

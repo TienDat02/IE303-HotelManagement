@@ -11,7 +11,8 @@ public class RoomService {
     private Date roomServiceDate;
     private Time roomServiceTime;
     private int quantity;
-    RoomService(int roomServiceID, int serviceID, String serviceName,  int roomID, Date roomServiceDate, Time roomServiceTime, int quantity){
+    private String note;
+    RoomService(int roomServiceID, int serviceID, String serviceName,  int roomID, Date roomServiceDate, Time roomServiceTime, int quantity, String note){
         this.roomServiceID = roomServiceID;
         this.serviceID = serviceID;
         this.roomID = roomID;
@@ -19,6 +20,7 @@ public class RoomService {
         this.roomServiceTime = roomServiceTime;
         this.quantity = quantity;
         this.serviceName = serviceName;
+        this.note = note;
     }
     public int getRoomServiceID() {
         return roomServiceID;
@@ -59,5 +61,11 @@ public class RoomService {
 
     public String getServiceName() {
         return serviceName;
+    }
+    public String getNote() {
+        return note;
+    }
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 }

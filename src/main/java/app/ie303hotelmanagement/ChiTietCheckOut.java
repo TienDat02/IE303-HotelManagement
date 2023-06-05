@@ -317,7 +317,7 @@ public class ChiTietCheckOut {
     }
 
     public void handleBackButton(MouseEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Check-out.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkout.fxml"));
         Parent dashboardParent = loader.load();
         CheckOutController checkOutController = loader.getController();
         checkOutController.setEmployeeID(employeeID);
