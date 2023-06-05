@@ -393,9 +393,11 @@ public class CheckoutDetails {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
-
+            PreparedStatement updateCouponStmt = conn.prepareStatement("UPDATE coupon SET Coupon_Status = 'Đã sử dụng' WHERE Guest_ID = ? AND Coupon_Status = 'Khả dụng' AND Coupon_ID = ?");
+            updateCouponStmt.setString(1, customerID);
+            updateCouponStmt.setString(2, discountInput.getText());
+            updateCouponStmt.executeUpdate();
             conn.close();
 
             // Print bill
