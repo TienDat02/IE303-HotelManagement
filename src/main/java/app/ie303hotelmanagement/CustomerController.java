@@ -124,6 +124,7 @@ public class CustomerController {
     }
     @FXML public void handleCustomerUpdateTier(){
         try {
+            System.out.println("diamondPercent: " + TiersSingleton.getInstance().getDiamondNearestCheckoutValue());
             Connection conn = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
             PreparedStatement stmt = conn.prepareStatement("Select * from guest");
             ResultSet rs = stmt.executeQuery();

@@ -66,8 +66,7 @@ public class ReportController {
         ObservableList<String> options = FXCollections.observableArrayList(
                 "Danh sách nhân viên",
                 "Báo cáo checkin",
-                "Báo cáo checkout",
-                "Báo cáo doanh thu"
+                "Báo cáo checkout"
         );
         reportType.setItems(options);
     }

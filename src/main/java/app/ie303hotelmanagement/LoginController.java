@@ -33,7 +33,7 @@ public class LoginController {
     private String connectUsername = DataConnector.getUsername();
     private String connectPassword = DataConnector.getPassword();
     @FXML
-    void handleLogin(ActionEvent event) throws SQLException, IOException {
+    void handleLogin(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         //Get the username and password from the input fields
         String inputUsername = username.getText();
         String inputPassword = password.getText();

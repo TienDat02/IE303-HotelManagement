@@ -7,6 +7,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
+import effects.ButtonAnimation;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
@@ -86,7 +87,6 @@ public class CheckoutDetails {
     private Text employeeID1;
     private String employeeID  = EmployeeSingleton.getInstance().getEmployeeID();
     private String customerID;
-    @FXML private Button billButton;
 
     @FXML
     private javafx.scene.control.TableView<CheckoutRoomDetails> roomTable;
@@ -156,6 +156,8 @@ public class CheckoutDetails {
     }
 
     public void setData() {
+        ButtonAnimation.addHoverEffect(checkoutButton);
+        ButtonAnimation.addHoverEffect(backButton);
         nowDate.setText(LocalDate.now().toString());
         nowTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         initialRoomTable();
@@ -240,7 +242,7 @@ public class CheckoutDetails {
             roomsTotal.setText(String.format("%.2f", total));
             conn.close();
             roomTable.setFixedCellSize(25); // Set the height of each row
-            roomTable.prefHeightProperty().bind(Bindings.size(roomTable.getItems()).multiply(roomTable.getFixedCellSize()).add(50));
+            roomTable.prefHeightProperty().bind(Bindings.size(roomTable.getItems()).multiply(roomTable.getFixedCellSize()).add(60));
             //roomTable.prefHeightProperty().bind(roomTable.fixedCellSizeProperty().multiply(Bindings.size(roomTable.getItems()).add(1.5))); // Bind the height of the table to the number of rows
             roomTable.minHeightProperty().bind(roomTable.prefHeightProperty()); // Set the minimum height to the preferred height
             roomTable.maxHeightProperty().bind(roomTable.prefHeightProperty()); // Set the maximum height to the preferred height
@@ -424,7 +426,6 @@ public class CheckoutDetails {
         backButton.setVisible(false);
         checkoutButton.setVisible(false);
         deleteRoomButton.setVisible(false);
-        billButton.setVisible(false);
         checkDiscountButton.setVisible(false);
         discountInput.setVisible(false);
         qrScanButton.setVisible(false);
@@ -464,7 +465,7 @@ public class CheckoutDetails {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save PDF File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        File file = fileChooser.showSaveDialog(billButton.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(checkoutButton.getScene().getWindow());
         if (file != null) {
             document.save(file);
         }
@@ -474,7 +475,6 @@ public class CheckoutDetails {
         backButton.setVisible(true);
         checkoutButton.setVisible(true);
         deleteRoomButton.setVisible(true);
-        billButton.setVisible(true);
     }
     public void handleBackButton() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Checkout.fxml"));

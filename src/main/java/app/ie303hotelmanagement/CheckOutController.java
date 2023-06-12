@@ -122,7 +122,7 @@ public class CheckOutController {
                 } else if (item.getRoomStatus().startsWith("Quá hạn")) {
                     setStyle("-fx-background-color: #ff0000;");
                 } else if (item.getRoomStatus().equals("Sắp trả")){
-                    setStyle("-fx-background-color: yellow;");
+                    setStyle("-fx-background-color: #ffF000;");
                 } else if (item.getRoomStatus().equals("Đang thuê")){
                     setStyle("-fx-background-color: green;");
                 } else {

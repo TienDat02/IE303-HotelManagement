@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class GraphsPaneController {
     @FXML private Spinner<Integer> minute2;
     @FXML private DatePicker date1;
     @FXML private DatePicker date2;
+    @FXML private Text totalIncome;
     private String connectUrl = DataConnector.getDatabaseUrl();
     private String username = DataConnector.getUsername();
     private String password = DataConnector.getPassword();
@@ -84,6 +86,16 @@ public class GraphsPaneController {
 
         resultSet.close();
         statement.close();
+
+        PreparedStatement statement2 = connection.prepareStatement("SELECT SUM(Total_Cost) as TOTAL FROM bill WHERE Bill_Date < '" + endDate + "' AND Bill_Date > '" + startDate + "'");
+        ResultSet resultSet2 = statement2.executeQuery();
+        if(resultSet2.next()) {
+            totalIncome.setText(resultSet2.getString(1));
+        } else {
+            totalIncome.setText("0");
+        }
+        resultSet2.close();
+
         connection.close();
     }
     @FXML

@@ -454,11 +454,6 @@
                         <Font name="Arrus-Black" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="billButton" mnemonicParsing="false" onAction="#printBill" prefHeight="38.0" prefWidth="194.0" style="-fx-background-color: E7F1FB; -fx-background-radius: 30 30 30; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 30 30 30;" text="In hóa đơn">
-                     <font>
-                        <Font name="Arrus-Black" size="14.0" />
-                     </font>
-                  </Button>
                </children>
             </HBox>
          </children>
